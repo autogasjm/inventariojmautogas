@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="theme-color" content="#000000" id="metaThemeColor">
-    <title>JM NEXUS 25.4.6 - Minimalist Edition</title>
+    <title>JM NEXUS 25.4.7 - Dual Camera Edition</title>
     
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -61,57 +61,12 @@
         @keyframes pulse { 0%{opacity:1} 50%{opacity:0.5} 100%{opacity:1} }
 
         /* --- CABECERA iTUNES MINIMALISTA --- */
-        .itunes-header { 
-            background: var(--itunes-bg); 
-            border-bottom: 1px solid var(--border); 
-            display: flex; 
-            justify-content: center; /* Centrado absoluto */
-            align-items: center; 
-            padding: 10px 15px; 
-            z-index: 10; 
-            box-shadow: 0 2px 10px rgba(0,0,0,0.2); 
-        }
-        
-        .itunes-lcd { 
-            background: var(--itunes-lcd-bg); 
-            border: 1px solid var(--border); 
-            border-radius: 8px; 
-            padding: 6px 20px; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            gap: 12px; 
-            width: 100%;
-            max-width: 320px; 
-            box-shadow: inset 0 2px 5px rgba(0,0,0,0.5); 
-            cursor: pointer; 
-            transition: transform 0.2s; 
-        }
+        .itunes-header { background: var(--itunes-bg); border-bottom: 1px solid var(--border); display: flex; justify-content: center; align-items: center; padding: 10px 15px; z-index: 10; box-shadow: 0 2px 10px rgba(0,0,0,0.2); }
+        .itunes-lcd { background: var(--itunes-lcd-bg); border: 1px solid var(--border); border-radius: 8px; padding: 6px 20px; display: flex; align-items: center; justify-content: center; gap: 12px; width: 100%; max-width: 320px; box-shadow: inset 0 2px 5px rgba(0,0,0,0.5); cursor: pointer; transition: transform 0.2s; }
         .itunes-lcd:active { transform: scale(0.98); }
-        
-        .itunes-lcd-section {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            white-space: nowrap;
-            overflow: hidden;
-        }
-
-        .itunes-lcd span { 
-            font-family: var(--font-mono); 
-            font-size: 0.75rem; 
-            color: var(--itunes-lcd-text); 
-            font-weight: 600; 
-            text-overflow: ellipsis; 
-            overflow: hidden;
-        }
-
-        .itunes-lcd-divider {
-            width: 1px;
-            height: 14px;
-            background: var(--border);
-            opacity: 0.5;
-        }
+        .itunes-lcd-section { display: flex; align-items: center; gap: 6px; white-space: nowrap; overflow: hidden; }
+        .itunes-lcd span { font-family: var(--font-mono); font-size: 0.75rem; color: var(--itunes-lcd-text); font-weight: 600; text-overflow: ellipsis; overflow: hidden; }
+        .itunes-lcd-divider { width: 1px; height: 14px; background: var(--border); opacity: 0.5; }
 
         .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
         .dot.online { background: var(--success); box-shadow: 0 0 8px var(--success); }
@@ -208,7 +163,8 @@
         .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; margin-bottom: 20px; }
         
         .btn-primary { width: 100%; padding: 16px; background: var(--primary); color: white; font-weight: 800; font-size: 1.05rem; border: none; border-radius: var(--radius-md); cursor: pointer; margin-top: 10px; }
-        .btn-sec { width: 100%; padding: 14px; background: var(--bg-elevated); border: 1px solid var(--border); color: var(--text-main); border-radius: var(--radius-md); font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 10px; }
+        .btn-sec { width: 100%; padding: 14px; background: var(--bg-elevated); border: 1px solid var(--border); color: var(--text-main); border-radius: var(--radius-md); font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 10px; border-color: transparent;}
+        .btn-sec:active { background: var(--border); }
         
         .tool-card { background: var(--bg-elevated); padding: 18px 10px; border-radius: var(--radius-md); border: 1px solid var(--border); text-align: center; cursor: pointer; }
         .tool-card i { font-size: 1.8rem; margin-bottom: 10px; display: block; }
@@ -225,7 +181,7 @@
         <div class="login-card">
             <div class="login-logo"><i class="fas fa-fingerprint"></i></div>
             <div class="login-title">JM NEXUS</div>
-            <div class="login-sub">Edición Minimalista</div>
+            <div class="login-sub">Cámara Dual Edition</div>
             
             <div class="login-inp-group">
                 <i class="fas fa-user login-icon"></i>
@@ -301,16 +257,28 @@
             <button class="btn-close" onclick="closeModal()"><i class="fas fa-times"></i></button>
         </div>
         <div class="modal-body">
-            <div style="display:flex; gap:20px; margin-bottom:20px; align-items:center">
-                <div style="width:90px; height:90px; background:var(--bg-elevated); border-radius:18px; border:2px dashed var(--border); display:flex; align-items:center; justify-content:center; overflow:hidden; cursor:pointer;" onclick="document.getElementById('fInp').click()">
+            
+            <div style="display:flex; gap:15px; margin-bottom:20px;">
+                <div style="width:100px; height:100px; background:var(--bg-elevated); border-radius:18px; border:2px dashed var(--border); display:flex; align-items:center; justify-content:center; overflow:hidden; flex-shrink:0; cursor:pointer;" onclick="document.getElementById('fGal').click()">
                     <img id="pImg" style="width:100%;height:100%;object-fit:cover;display:none">
-                    <i class="fas fa-camera" id="pIcon" style="color:var(--text-muted); font-size:1.5rem"></i>
+                    <i class="fas fa-image" id="pIcon" style="color:var(--text-muted); font-size:1.8rem"></i>
                 </div>
-                <input type="file" id="fInp" hidden accept="image/*" onchange="procImg(this)">
-                <div style="flex:1">
-                    <label class="input-label">Nombre *</label>
-                    <input class="input-control" id="iName" placeholder="Ej: Filtro de Aceite" style="margin-bottom:0">
+                <div style="flex:1; display:flex; flex-direction:column; justify-content:center; gap:10px;">
+                    <button class="btn-sec" style="margin:0; padding:12px; font-size:0.9rem;" onclick="document.getElementById('fCam').click()">
+                        <i class="fas fa-camera"></i> Tomar Foto
+                    </button>
+                    <button class="btn-sec" style="margin:0; padding:12px; font-size:0.9rem;" onclick="document.getElementById('fGal').click()">
+                        <i class="fas fa-folder-open"></i> Galería
+                    </button>
+                    
+                    <input type="file" id="fCam" hidden accept="image/*" capture="environment" onchange="procImg(this)">
+                    <input type="file" id="fGal" hidden accept="image/*" onchange="procImg(this)">
                 </div>
+            </div>
+
+            <div class="input-group">
+                <label class="input-label">Nombre del Producto *</label>
+                <input class="input-control" id="iName" placeholder="Ej: Filtro de Aceite">
             </div>
 
             <div class="grid-2">
@@ -333,7 +301,7 @@
             <button class="btn-primary" onclick="saveItem()"><i class="fas fa-save"></i> GUARDAR CAMBIOS</button>
             <div class="grid-2" style="margin-top:10px" id="editActions">
                 <button class="btn-sec" onclick="cloneItem()"><i class="fas fa-copy"></i> Duplicar</button>
-                <button class="btn-sec" onclick="deleteItem()" style="color:var(--danger); border-color:var(--danger);"><i class="fas fa-trash"></i> Eliminar</button>
+                <button class="btn-sec" onclick="deleteItem()" style="color:var(--danger); border:1px solid var(--danger);"><i class="fas fa-trash"></i> Eliminar</button>
             </div>
         </div>
     </div>
@@ -358,7 +326,7 @@
             </div>
             <div class="grid-2">
                 <button class="btn-sec" onclick="toggleCurrency()"><i class="fas fa-exchange-alt"></i> USD / CLP</button>
-                <button class="btn-sec" onclick="logout()" style="color:var(--danger); border-color:var(--danger)"><i class="fas fa-power-off"></i> Salir</button>
+                <button class="btn-sec" onclick="logout()" style="color:var(--danger); border:1px solid var(--danger);"><i class="fas fa-power-off"></i> Salir</button>
             </div>
         </div>
     </div>
@@ -380,7 +348,7 @@
                 <span id="cTotal" style="font-size:1.8rem; font-weight:800; color:var(--success); font-family:var(--font-mono);">$0</span>
             </div>
             <button class="btn-primary" style="background:#25D366; color:white;" onclick="sendWhatsApp()"><i class="fab fa-whatsapp"></i> Generar Orden</button>
-            <button class="btn-sec" onclick="clearCart()" style="color:var(--danger); border-color:transparent;">Vaciar Carrito</button>
+            <button class="btn-sec" onclick="clearCart()" style="color:var(--danger); border:1px solid transparent;">Vaciar Carrito</button>
         </div>
     </div>
 
@@ -464,7 +432,7 @@
                 let r = await fetch(API_URL);
                 let text = await r.text(); 
                 try { let d = JSON.parse(text); if(Array.isArray(d)) downloadedData = d; } 
-                catch(jsonError) { console.error("Servidor no devolvió JSON:", text.substring(0, 50)); setStatus('offline'); return; }
+                catch(jsonError) { console.error("Servidor no JSON:", text.substring(0, 50)); setStatus('offline'); return; }
             } catch(e) { console.error("Fallo de red:", e); setStatus('offline'); return; }
 
             if (downloadedData) { db.items = downloadedData; saveLocal(); setStatus('online'); try { render(); } catch(renderError) { console.error("Fallo en render:", renderError); } }
@@ -507,16 +475,8 @@
                 const searchEl = document.getElementById("search");
                 const q = searchEl ? searchEl.value.toLowerCase() : "";
                 
-                if(!db || !Array.isArray(db.items)) { 
-                    if(list) list.innerHTML = `<div class="empty-state"><p>Sin datos válidos</p></div>`; 
-                    if(pagWrapper) pagWrapper.style.display = "none";
-                    return; 
-                }
-                if(db.items.length === 0) { 
-                    if(list) list.innerHTML = `<div class="empty-state"><i class="fas fa-box-open"></i><p>Inventario Vacío</p></div>`; 
-                    if(pagWrapper) pagWrapper.style.display = "none";
-                    return; 
-                }
+                if(!db || !Array.isArray(db.items)) { if(list) list.innerHTML = `<div class="empty-state"><p>Sin datos válidos</p></div>`; if(pagWrapper) pagWrapper.style.display = "none"; return; }
+                if(db.items.length === 0) { if(list) list.innerHTML = `<div class="empty-state"><i class="fas fa-box-open"></i><p>Inventario Vacío</p></div>`; if(pagWrapper) pagWrapper.style.display = "none"; return; }
 
                 let view = db.items.filter(i => i !== null && typeof i === 'object');
                 if(currentTypeFilter !== 'Todos') { view = view.filter(i => String(i.tipo || 'Venta') === currentTypeFilter); }
@@ -570,7 +530,6 @@
 
                 if(list) list.innerHTML = renderHTML;
 
-                // ACTUALIZAR PAGINACIÓN FIJA
                 if(pagWrapper) {
                     if(totalPages > 0 && view.length > 0) {
                         pagWrapper.innerHTML = `
@@ -581,11 +540,9 @@
                         </div>`;
                         pagWrapper.style.display = "block";
                     } else {
-                        pagWrapper.innerHTML = "";
-                        pagWrapper.style.display = "none";
+                        pagWrapper.innerHTML = ""; pagWrapper.style.display = "none";
                     }
                 }
-
             } catch(e) { console.error("Error crítico en Render:", e); }
         }
         function changePage(delta) { currentPage += delta; render(); document.getElementById('list').scrollTop = 0; }
