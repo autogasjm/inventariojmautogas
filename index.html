@@ -3,727 +3,647 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="theme-color" content="#0f172a">
-    <title>JM NEXUS 25.2 STABLE</title>
+    <meta name="theme-color" content="#000000" id="metaThemeColor">
+    <title>JM NEXUS 25.4.6 - Minimalist Edition</title>
     
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&family=Roboto+Mono:wght@500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     
     <style>
+        /* TEMA OSCURO */
         :root {
-            /* ENGINE VISUAL */
-            --bg-app: #050505;
-            --bg-glass: rgba(20, 20, 20, 0.95);
-            --bg-card: #141414;
-            --bg-modal: #1a1a1a;
+            --bg-base: #0f172a;       
+            --bg-surface: #1e293b;    
+            --bg-elevated: #334155;   
+            --primary: #3b82f6;       
+            --primary-active: #2563eb;
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
-            --border: 1px solid rgba(255, 255, 255, 0.1);
-            --primary: #38bdf8;
-            --accent: #818cf8;
-            --success: #34d399;
-            --danger: #f87171;
-            --warning: #fbbf24;
-            --radius: 16px;
-            --font-main: 'Poppins', sans-serif;
-            --font-mono: 'Roboto Mono', monospace;
+            --border: #334155;
+            --success: #10b981; 
+            --warning: #f59e0b; 
+            --danger: #ef4444;
+            --radius-md: 12px;
+            --font-main: 'Inter', sans-serif;
+            --font-mono: ui-monospace, SFMono-Regular, monospace;
+            
+            /* iTunes Header Colors */
+            --itunes-bg: linear-gradient(180deg, #334155 0%, #0f172a 100%);
+            --itunes-lcd-bg: #020617;
+            --itunes-lcd-text: #e2e8f0;
         }
 
-        /* RESET & BASE */
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; user-select: none; outline: none; }
-        body { margin: 0; height: 100dvh; width: 100%; font-family: var(--font-main); background: var(--bg-app); color: var(--text-main); display: flex; flex-direction: column; overflow: hidden; }
-
-        /* --- ANIMACIONES --- */
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+        /* TEMA CLARO */
+        body.theme-light { 
+            --bg-base: #f1f5f9; --bg-surface: #ffffff; --bg-elevated: #e2e8f0; --primary: #2563eb; --text-main: #0f172a; --text-muted: #64748b; --border: #cbd5e1; 
+            --itunes-bg: linear-gradient(180deg, #f8fafc 0%, #e2e8f0 100%);
+            --itunes-lcd-bg: #cbd5e1;
+            --itunes-lcd-text: #0f172a;
         }
-
-        /* --- LOGIN SYSTEM --- */
-        .login-layer {
-            position: fixed; inset: 0; z-index: 9999;
-            background: #000;
-            display: flex; align-items: center; justify-content: center;
-            background-image: radial-gradient(circle at 50% 50%, #1a1a1a 0%, #000 100%);
-            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        /* TEMA OLED */
+        body.theme-oled { 
+            --bg-base: #000000; --bg-surface: #0a0a0a; --bg-elevated: #1a1a1a; --border: #222222; 
+            --itunes-bg: linear-gradient(180deg, #111 0%, #000 100%);
+            --itunes-lcd-bg: #000000;
+            --itunes-lcd-text: #34d399;
         }
         
-        .login-layer.unlocking { opacity: 0; transform: scale(1.1); filter: blur(10px); pointer-events: none; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; margin: 0; padding: 0; font-family: var(--font-main); }
+        body { background-color: var(--bg-base); color: var(--text-main); height: 100dvh; display: flex; flex-direction: column; overflow: hidden; transition: background-color 0.3s, color 0.3s; }
 
-        .login-card {
-            width: 90%; max-width: 320px; padding: 40px 30px; border-radius: 24px;
-            background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08);
-            backdrop-filter: blur(20px); text-align: center;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: var(--bg-elevated); border-radius: 10px; }
+
+        @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        @keyframes pulse { 0%{opacity:1} 50%{opacity:0.5} 100%{opacity:1} }
+
+        /* --- CABECERA iTUNES MINIMALISTA --- */
+        .itunes-header { 
+            background: var(--itunes-bg); 
+            border-bottom: 1px solid var(--border); 
+            display: flex; 
+            justify-content: center; /* Centrado absoluto */
+            align-items: center; 
+            padding: 10px 15px; 
+            z-index: 10; 
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2); 
         }
-
-        .login-card > * { opacity: 0; animation: fadeInUp 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
-        .login-card > *:nth-child(1) { animation-delay: 0.1s; } 
-        .login-card > *:nth-child(2) { animation-delay: 0.2s; }
-        .login-card > *:nth-child(3) { animation-delay: 0.3s; }
-        .login-card > *:nth-child(4) { animation-delay: 0.4s; }
-        .login-card > *:nth-child(5) { animation-delay: 0.5s; }
-        .login-card > *:nth-child(6) { animation-delay: 0.6s; }
-
-        .login-logo { font-size: 3rem; margin-bottom: 10px; background: linear-gradient(135deg, var(--primary), var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .login-title { font-weight: 800; font-size: 1.2rem; margin-bottom: 5px; letter-spacing: 1px; }
-        .login-sub { font-size: 0.75rem; color: var(--text-muted); margin-bottom: 30px; text-transform: uppercase; letter-spacing: 2px; }
         
-        .login-inp-group { position: relative; margin-bottom: 15px; }
-        .login-inp {
-            width: 100%; background: rgba(0,0,0,0.3); border: 1px solid #333;
-            padding: 15px 15px 15px 45px; border-radius: 12px;
-            color: white; font-size: 0.9rem; transition: 0.3s; font-family: var(--font-mono);
+        .itunes-lcd { 
+            background: var(--itunes-lcd-bg); 
+            border: 1px solid var(--border); 
+            border-radius: 8px; 
+            padding: 6px 20px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            gap: 12px; 
+            width: 100%;
+            max-width: 320px; 
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.5); 
+            cursor: pointer; 
+            transition: transform 0.2s; 
         }
-        .login-inp:focus { border-color: var(--primary); background: rgba(56, 189, 248, 0.05); }
-        .login-icon { position: absolute; left: 15px; top: 16px; color: var(--text-muted); font-size: 0.9rem; }
+        .itunes-lcd:active { transform: scale(0.98); }
         
-        .btn-login {
-            width: 100%; padding: 16px; margin-top: 10px;
-            background: var(--primary); color: #000; border: none; border-radius: 12px;
-            font-weight: 700; font-size: 1rem; cursor: pointer; transition: 0.2s;
-            box-shadow: 0 4px 15px rgba(56, 189, 248, 0.3);
+        .itunes-lcd-section {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            white-space: nowrap;
+            overflow: hidden;
         }
-        .btn-login:active { transform: scale(0.98); }
-        .login-err { color: var(--danger); font-size: 0.8rem; margin-top: 15px; min-height: 20px; font-weight: 600; }
 
-        /* --- APP CONTAINER --- */
-        #appContainer {
-            display: flex; flex-direction: column; height: 100%; width: 100%;
-            opacity: 0; transform: scale(0.98);
-            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        .itunes-lcd span { 
+            font-family: var(--font-mono); 
+            font-size: 0.75rem; 
+            color: var(--itunes-lcd-text); 
+            font-weight: 600; 
+            text-overflow: ellipsis; 
+            overflow: hidden;
         }
-        #appContainer.visible { opacity: 1; transform: scale(1); }
 
-        /* --- UI PRINCIPAL --- */
-        .top-bar { padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; background: var(--bg-app); border-bottom: var(--border); z-index: 50; }
-        .brand { font-weight: 800; font-size: 1.3rem; letter-spacing: -0.5px; display: flex; align-items: center; gap: 10px; background: linear-gradient(90deg, var(--primary), var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        
-        .status-pill { font-size: 0.75rem; background: #222; border: var(--border); padding: 5px 12px; border-radius: 20px; display: flex; align-items: center; gap: 6px; cursor: pointer; color: var(--text-muted); }
-        .dot { width: 8px; height: 8px; border-radius: 50%; }
+        .itunes-lcd-divider {
+            width: 1px;
+            height: 14px;
+            background: var(--border);
+            opacity: 0.5;
+        }
+
+        .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
         .dot.online { background: var(--success); box-shadow: 0 0 8px var(--success); }
         .dot.sync { background: var(--warning); animation: pulse 1s infinite; }
-        .dot.offline { background: var(--danger); }
-        @keyframes pulse { 0%{opacity:1} 50%{opacity:0.3} 100%{opacity:1} }
-        .help-btn { width: 34px; height: 34px; border-radius: 50%; background: rgba(56, 189, 248, 0.1); border: 1px solid var(--primary); color: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 1rem; cursor: pointer; }
+        .dot.upload { background: var(--primary); box-shadow: 0 0 8px var(--primary); animation: pulse 0.8s infinite; }
+        .dot.offline { background: var(--danger); box-shadow: 0 0 8px var(--danger); }
 
-        .kpi-wrapper { display: flex; gap: 10px; overflow-x: auto; padding: 15px 20px; scrollbar-width: none; background: var(--bg-app); }
-        .kpi-card { min-width: 140px; background: var(--bg-card); border: var(--border); padding: 12px; border-radius: var(--radius); position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: center; }
-        .kpi-val { font-size: 1.2rem; font-weight: 700; color: var(--text-main); font-family: var(--font-mono); }
-        .kpi-lbl { font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700; margin-top: 4px; }
-        .kpi-bar { position: absolute; bottom: 0; left: 0; height: 3px; background: var(--primary); width: 0%; transition: 1s; }
+        /* --- LOGIN --- */
+        #loginLayer { position: fixed; inset: 0; z-index: 9999; background: var(--bg-base); display: flex; align-items: center; justify-content: center; transition: opacity 0.4s, transform 0.4s; }
+        #loginLayer.unlocking { opacity: 0; transform: scale(1.05); pointer-events: none; }
+        .login-card { background: var(--bg-surface); padding: 40px 35px; border-radius: 24px; border: 1px solid var(--border); width: 90%; max-width: 380px; text-align: center; box-shadow: 0 15px 35px rgba(0,0,0,0.3); }
+        .login-logo { font-size: 3.5rem; margin-bottom: 10px; color: var(--primary); }
+        .login-title { font-weight: 800; font-size: 1.4rem; margin-bottom: 5px; }
+        .login-sub { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 30px; font-weight: 600; }
+        .login-inp-group { position: relative; margin-bottom: 15px; }
+        .login-inp { width: 100%; padding: 16px 16px 16px 45px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: var(--radius-md); color: var(--text-main); font-size: 1rem; }
+        .login-inp:focus { border-color: var(--primary); }
+        .login-icon { position: absolute; left: 16px; top: 18px; color: var(--text-muted); }
+        .btn-login { width: 100%; padding: 18px; margin-top: 15px; background: var(--primary); color: white; border: none; border-radius: var(--radius-md); font-weight: 800; font-size: 1.05rem; cursor: pointer; }
+        .btn-login:active { background: var(--primary-active); }
+        .login-err { color: var(--danger); font-size: 0.85rem; margin-top: 15px; min-height: 20px; font-weight: 600; }
 
-        .controls-area { padding: 0 20px 10px; background: var(--bg-app); border-bottom: var(--border); z-index: 40; }
-        .search-box { display: flex; align-items: center; background: var(--bg-card); border: var(--border); border-radius: 12px; padding: 0 12px; height: 48px; margin-bottom: 10px; }
-        .search-inp { flex: 1; background: transparent; border: none; color: white; font-size: 1rem; outline: none; padding: 0 10px; }
-        .icon-btn { color: var(--text-muted); padding: 8px; cursor: pointer; font-size: 1.1rem; }
-        .filter-row { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; padding-bottom: 5px; }
-        .chip { background: #222; border: var(--border); padding: 6px 14px; border-radius: 20px; font-size: 0.75rem; color: var(--text-muted); white-space: nowrap; cursor: pointer; transition: 0.2s; }
-        .chip.active { background: var(--primary); color: #000; font-weight: 700; border-color: var(--primary); }
+        /* --- CONTENEDORES --- */
+        #appContainer { display: flex; flex-direction: column; height: 100%; width: 100%; opacity: 0; transform: scale(0.98); transition: all 0.4s; }
+        #appContainer.visible { opacity: 1; transform: scale(1); }
 
-        /* LIST & PAGINATION */
-        .list-area { flex: 1; overflow-y: auto; padding: 15px 20px 120px; position: relative; scroll-behavior: smooth; } 
-        
-        .pagination-bar {
-            margin-top: 20px; padding: 10px; background: var(--bg-card); border: var(--border); border-radius: 12px;
-            display: flex; justify-content: space-between; align-items: center;
-        }
-        .page-btn { padding: 8px 15px; background: #222; border: var(--border); border-radius: 8px; color: var(--text-main); font-size: 0.8rem; cursor: pointer; }
-        .page-btn:active { background: var(--primary); color:black; }
-        .page-info { font-size: 0.8rem; color: var(--text-muted); font-family: var(--font-mono); }
-
-        .empty-state { text-align: center; margin-top: 50px; color: var(--text-muted); opacity: 0.5; }
-        .empty-state i { font-size: 3rem; margin-bottom: 15px; }
-        .item-card { display: flex; align-items: center; background: var(--bg-card); border: var(--border); border-radius: var(--radius); margin-bottom: 10px; padding: 10px; position: relative; overflow: hidden; transition: transform 0.1s; }
-        .item-card:active { transform: scale(0.98); background: #222; }
-        .status-strip { width: 4px; height: 100%; position: absolute; left: 0; top: 0; }
-        .item-img { width: 55px; height: 55px; background: #000; border-radius: 10px; margin-left: 8px; margin-right: 12px; display: flex; align-items: center; justify-content: center; font-weight: 800; color: var(--text-muted); overflow: hidden; flex-shrink: 0; border: 1px solid #333; }
-        .item-img img { width: 100%; height: 100%; object-fit: cover; }
-        .item-content { flex: 1; overflow: hidden; }
-        .item-title { font-weight: 600; font-size: 0.9rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--text-main); }
-        .item-details { display: flex; gap: 8px; margin-top: 4px; font-size: 0.75rem; color: var(--text-muted); }
-        .price-hl { color: var(--success); font-weight: 700; font-family: var(--font-mono); }
-        .item-actions { display: flex; flex-direction: column; align-items: center; gap: 5px; min-width: 40px; }
-        .stock-val { font-size: 1rem; font-weight: 800; font-family: var(--font-mono); }
-        .mini-btn { width: 28px; height: 28px; border-radius: 8px; background: #222; border: var(--border); color: var(--text-muted); display: flex; align-items: center; justify-content: center; }
-
-        .dock-wrapper { position: fixed; bottom: 20px; left: 0; width: 100%; display: flex; justify-content: center; z-index: 100; pointer-events: none; }
-        .dock { pointer-events: auto; background: rgba(20,20,20,0.9); backdrop-filter: blur(15px); border: var(--border); padding: 10px 25px; border-radius: 30px; display: flex; gap: 25px; align-items: center; box-shadow: 0 10px 40px rgba(0,0,0,0.5); }
-        .dock-item { display: flex; flex-direction: column; align-items: center; gap: 4px; color: var(--text-muted); font-size: 0.7rem; cursor: pointer; min-width: 45px; }
-        .dock-item i { font-size: 1.4rem; transition: 0.2s; }
-        .dock-item.active { color: var(--primary); }
-        .dock-item.active i { transform: translateY(-3px); }
-        .dock-fab { width: 55px; height: 55px; background: var(--primary); border-radius: 18px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: #000; margin-top: -40px; border: 5px solid var(--bg-app); box-shadow: 0 10px 20px rgba(56, 189, 248, 0.3); cursor: pointer; transition: 0.2s; }
-        .dock-fab:active { transform: translateY(-35px) scale(0.95); }
-        .cart-badge { position: absolute; top: -5px; right: 5px; background: var(--danger); color: white; font-size: 0.65rem; width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; display: none; }
-
-        /* MODALS */
-        .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 200; display: none; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
-        .sheet { background: var(--bg-modal); width: 90%; max-width: 450px; max-height: 85vh; border-radius: 20px; border: var(--border); display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.5); animation: zoomIn 0.2s; }
-        @keyframes zoomIn { from{transform:scale(0.9);opacity:0} to{transform:scale(1);opacity:1} }
-        .sheet-header { padding: 15px 20px; border-bottom: var(--border); display: flex; justify-content: space-between; align-items: center; background: var(--bg-card); }
-        .sheet-title { font-weight: 700; font-size: 1.1rem; }
-        .close-btn { width: 30px; height: 30px; border-radius: 50%; background: #222; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--text-muted); }
-        .sheet-body { padding: 20px; overflow-y: auto; }
-
-        .inp-label { font-size: 0.75rem; color: var(--text-muted); margin-bottom: 5px; display: block; font-weight: 600; }
-        .inp { width: 100%; background: #222; border: var(--border); color: white; padding: 12px; border-radius: 10px; outline: none; margin-bottom: 15px; font-family: var(--font-main); font-size: 0.95rem; }
-        .inp:focus { border-color: var(--primary); background: #000; }
-        .btn-main { width: 100%; padding: 14px; background: var(--text-main); color: #000; border: none; border-radius: 12px; font-weight: 700; font-size: 1rem; cursor: pointer; margin-top: 10px; }
-        .btn-sec { width: 100%; padding: 12px; background: transparent; border: var(--border); color: var(--text-muted); border-radius: 12px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 10px; }
-        
-        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 15px; }
-        .tool-card { background: #222; padding: 15px; border-radius: 12px; border: var(--border); text-align: center; cursor: pointer; transition: 0.2s; }
-        .tool-card:active { background: var(--primary); color: #000; }
-        .tool-card i { font-size: 1.5rem; margin-bottom: 5px; display: block; }
-        .tool-card span { font-size: 0.7rem; font-weight: 600; }
-
-        .help-item { margin-bottom: 15px; border-bottom: var(--border); padding-bottom: 15px; }
-        .help-head { color: var(--primary); font-weight: 700; display: flex; align-items: center; gap: 8px; margin-bottom: 5px; }
-        .help-body { font-size: 0.85rem; color: var(--text-muted); line-height: 1.5; }
-        
-        .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-100px); background: #222; border: 1px solid var(--primary); padding: 10px 20px; border-radius: 30px; z-index: 1000; display: flex; gap: 10px; align-items: center; transition: 0.3s; }
+        .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-100px); background: var(--bg-surface); border: 1px solid var(--primary); padding: 12px 24px; border-radius: 30px; z-index: 9000; display: flex; gap: 10px; align-items: center; transition: 0.4s; box-shadow: 0 10px 25px rgba(0,0,0,0.5); font-weight: 600; font-size: 0.9rem; }
         .toast.show { transform: translateX(-50%) translateY(0); }
-        .scanner-layer { position: fixed; inset: 0; background: #000; z-index: 300; display: none; flex-direction: column; }
+        #offline-banner { display:none; width: 100%; text-align: center; padding: 6px; font-size: 0.75rem; font-weight: bold; background: var(--danger); color: white; z-index: 51; }
+
+        .stats-row { display: flex; gap: 10px; padding: 15px 20px; background: var(--bg-base); }
+        .stat-box { flex: 1; background: var(--bg-surface); padding: 12px; border-radius: var(--radius-md); text-align: center; border: 1px solid var(--border); }
+        .stat-value { font-size: 1.3rem; font-weight: 800; margin-bottom: 2px; font-family: var(--font-mono); }
+        .stat-label { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700; }
+
+        .search-container { padding: 0 20px; background: var(--bg-base); display: flex; flex-direction: column; gap: 10px; }
+        .search-bar { display: flex; background: var(--bg-surface); border: 2px solid var(--border); border-radius: 16px; overflow: hidden; height: 50px; }
+        .search-bar:focus-within { border-color: var(--primary); }
+        .search-input { flex: 1; background: transparent; border: none; color: var(--text-main); padding: 0 15px; font-size: 1rem; }
+        .search-btn { width: 50px; display: grid; place-items: center; font-size: 1.1rem; color: var(--text-muted); cursor: pointer; background: transparent; border: none; border-left: 1px solid var(--border); }
+        
+        .type-tabs { display: flex; background: var(--bg-surface); border-radius: 10px; overflow: hidden; border: 1px solid var(--border); margin-bottom: 10px; }
+        .type-tab { flex: 1; text-align: center; padding: 10px; color: var(--text-muted); font-weight: 700; font-size: 0.85rem; cursor: pointer; transition: 0.2s; }
+        .type-tab.active { background: var(--primary); color: white; }
+        
+        .filter-row { display: flex; gap: 10px; overflow-x: auto; scrollbar-width: none; padding-bottom: 10px; }
+        .chip { background: var(--bg-surface); border: 1px solid var(--border); padding: 6px 14px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; color: var(--text-muted); white-space: nowrap; cursor: pointer; }
+        .chip.active { border-color: var(--primary); color: var(--primary); }
+
+        /* LISTA PRINCIPAL */
+        .inventory-list { flex: 1; overflow-y: auto; padding: 0 20px 160px; transform: translateZ(0); }
+        .empty-state { text-align: center; margin-top: 10vh; color: var(--text-muted); }
+        .empty-state i { font-size: 3rem; margin-bottom: 10px; opacity: 0.5; }
+        
+        .item-card { background: var(--bg-surface); border-radius: var(--radius-md); padding: 14px; margin-bottom: 12px; display: flex; align-items: center; gap: 15px; border: 1px solid var(--border); cursor: pointer; animation: slideUp 0.3s backwards; }
+        .item-icon { width: 50px; height: 50px; border-radius: 10px; background: var(--bg-elevated); display: grid; place-items: center; font-size: 1.5rem; color: var(--text-muted); flex-shrink: 0; overflow: hidden; font-weight: 800; border: 1px solid var(--border); }
+        .item-icon img { width: 100%; height: 100%; object-fit: cover; }
+        .item-info { flex: 1; overflow: hidden; }
+        .item-title { font-weight: 700; font-size: 1.05rem; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .item-meta { font-size: 0.8rem; color: var(--text-muted); display: flex; gap: 10px; }
+        .price-hl { color: var(--success); font-weight: bold; font-family: var(--font-mono); }
+        
+        .item-stock { text-align: right; display: flex; flex-direction: column; align-items: center; gap: 5px; min-width: 45px; }
+        .stock-number { font-size: 1.3rem; font-weight: 800; font-family: var(--font-mono); }
+        .btn-add-cart { background: var(--bg-elevated); border: 1px solid var(--border); color: var(--text-main); width: 36px; height: 36px; border-radius: 8px; font-size: 1rem; cursor: pointer; }
+
+        /* --- PAGINACIÓN FIJA --- */
+        .pagination-wrapper { position: fixed; bottom: 75px; left: 0; width: 100%; background: var(--bg-base); padding: 10px 20px; z-index: 40; border-top: 1px solid var(--border); display: none; }
+        .pagination-bar { background: var(--bg-surface); border: 1px solid var(--border); border-radius: var(--radius-md); display: flex; justify-content: space-between; align-items: center; padding: 8px; }
+        .page-btn { padding: 10px 15px; background: var(--bg-elevated); border: none; border-radius: 8px; color: var(--text-main); font-weight: bold; cursor: pointer; font-size: 0.9rem; display: flex; align-items: center; gap: 5px; transition: 0.2s; }
+        .page-btn:active:not(:disabled) { background: var(--primary); color: white; }
+        .page-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+
+        /* --- NAVEGACIÓN INFERIOR --- */
+        .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; height: 75px; background: var(--bg-surface); border-top: 1px solid var(--border); display: flex; justify-content: space-around; align-items: center; z-index: 50; }
+        .nav-item { display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-muted); flex: 1; height: 100%; cursor: pointer; font-size: 0.75rem; font-weight: 600; gap: 4px; }
+        .nav-item i { font-size: 1.3rem; }
+        .nav-item.active { color: var(--primary); }
+        .nav-fab { width: 60px; height: 60px; background: var(--primary); border-radius: 50%; display: grid; place-items: center; font-size: 1.8rem; color: white; transform: translateY(-20px); border: 4px solid var(--bg-base); cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+        .badge { background: var(--danger); color: white; border-radius: 10px; padding: 2px 6px; font-size: 0.7rem; font-weight: bold; position: absolute; top: 10px; right: 20%; display: none; }
+
+        /* MODALES */
+        .modal-overlay { position: fixed; inset: 0; background: var(--bg-base); z-index: 200; display: none; flex-direction: column; animation: slideUp 0.3s; }
+        .modal-header { padding: 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); background: var(--bg-surface); }
+        .modal-title { font-size: 1.2rem; font-weight: 800; }
+        .btn-close { background: var(--bg-elevated); color: var(--text-main); border: none; width: 36px; height: 36px; border-radius: 50%; font-size: 1.1rem; cursor: pointer; }
+        .modal-body { padding: 20px; overflow-y: auto; flex: 1; }
+        
+        .input-group { margin-bottom: 15px; }
+        .input-label { display: block; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 6px; font-weight: 700; text-transform: uppercase; }
+        .input-control { width: 100%; background: var(--bg-elevated); border: 1px solid var(--border); padding: 14px; border-radius: var(--radius-md); color: var(--text-main); font-size: 1rem; }
+        .input-control:focus { border-color: var(--primary); }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; margin-bottom: 20px; }
+        
+        .btn-primary { width: 100%; padding: 16px; background: var(--primary); color: white; font-weight: 800; font-size: 1.05rem; border: none; border-radius: var(--radius-md); cursor: pointer; margin-top: 10px; }
+        .btn-sec { width: 100%; padding: 14px; background: var(--bg-elevated); border: 1px solid var(--border); color: var(--text-main); border-radius: var(--radius-md); font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 10px; }
+        
+        .tool-card { background: var(--bg-elevated); padding: 18px 10px; border-radius: var(--radius-md); border: 1px solid var(--border); text-align: center; cursor: pointer; }
+        .tool-card i { font-size: 1.8rem; margin-bottom: 10px; display: block; }
+        .tool-card span { font-size: 0.75rem; font-weight: 700; }
+
+        .scanner-layer { position: fixed; inset: 0; background: #000; z-index: 9999; display: none; flex-direction: column; }
+        #reader { flex: 1; background: #000; }
+        #reader__dashboard_section_csr span { color: white !important; }
     </style>
 </head>
 <body>
 
-    <div class="login-layer" id="loginLayer">
+    <div id="loginLayer">
         <div class="login-card">
             <div class="login-logo"><i class="fas fa-fingerprint"></i></div>
             <div class="login-title">JM NEXUS</div>
-            <div class="login-sub">Sistema de Inventario V25.2</div>
+            <div class="login-sub">Edición Minimalista</div>
             
             <div class="login-inp-group">
                 <i class="fas fa-user login-icon"></i>
                 <input type="text" id="logUser" class="login-inp" placeholder="ID Usuario" autocomplete="off" onkeyup="if(event.key==='Enter')document.getElementById('logPass').focus()">
             </div>
-            
             <div class="login-inp-group">
                 <i class="fas fa-lock login-icon"></i>
                 <input type="password" id="logPass" class="login-inp" placeholder="PIN de Acceso" onkeyup="if(event.key==='Enter')attemptLogin()">
             </div>
-
             <button class="btn-login" onclick="attemptLogin()">ACCEDER</button>
             <div class="login-err" id="loginMsg"></div>
         </div>
     </div>
 
     <div id="appContainer">
+        <div class="toast" id="toast"></div>
+        <div id="offline-banner"><i class="fas fa-wifi"></i> Modo Local - Sin conexión a Internet</div>
 
-        <div class="toast" id="toast"><i class="fas fa-check"></i> <span id="toastMsg">Ready</span></div>
-
-        <div class="top-bar">
-            <div class="brand"><i class="fas fa-layer-group"></i> JM NEXUS</div>
-            <div style="display:flex; gap:10px; align-items:center">
-                <button class="help-btn" onclick="openModal('modalHelp')"><i class="fas fa-question"></i></button>
-                <div class="status-pill" onclick="manualSync()">
-                    <div class="dot online" id="syncDot"></div> <span id="syncText">Online</span>
+        <header class="itunes-header">
+            <div class="itunes-lcd" onclick="manualSync()">
+                <div class="itunes-lcd-section" style="color: var(--text-muted);">
+                    <i class="fas fa-user"></i>
+                    <span id="userNameDisplay" style="font-family: var(--font-main);">Admin</span>
+                </div>
+                <div class="itunes-lcd-divider"></div>
+                <div class="itunes-lcd-section">
+                    <div class="dot online" id="syncDot"></div> 
+                    <span id="syncText">Sincronizado</span>
                 </div>
             </div>
+        </header>
+
+        <div class="stats-row">
+            <div class="stat-box"><div class="stat-value" id="kItems">0</div><div class="stat-label">Items</div></div>
+            <div class="stat-box"><div class="stat-value" id="kVal" style="color:var(--success)">$0</div><div class="stat-label">Valor</div></div>
+            <div class="stat-box"><div class="stat-value" id="kLow" style="color:var(--warning)">0</div><div class="stat-label">Crítico</div></div>
         </div>
 
-        <div class="kpi-wrapper">
-            <div class="kpi-card">
-                <span class="kpi-val" id="kItems">0</span>
-                <span class="kpi-lbl">Total Items</span>
+        <div class="search-container">
+            <div class="search-bar">
+                <input type="text" id="search" class="search-input" placeholder="Buscar pieza o código..." onkeyup="handleSearch()">
+                <button class="search-btn" onclick="openScanner()"><i class="fas fa-qrcode"></i></button>
+                <button class="search-btn" onclick="startVoice()"><i class="fas fa-microphone"></i></button>
             </div>
-            <div class="kpi-card">
-                <span class="kpi-val" id="kVal" style="color:var(--success)">$0</span>
-                <span class="kpi-lbl">Valoración</span>
-                <div class="kpi-bar" id="barVal"></div>
-            </div>
-            <div class="kpi-card">
-                <span class="kpi-val" id="kLow" style="color:var(--warning)">0</span>
-                <span class="kpi-lbl">Stock Bajo</span>
-            </div>
-        </div>
-
-        <div class="controls-area">
-            <div class="search-box">
-                <i class="fas fa-search" style="color:var(--text-muted)"></i>
-                <input class="search-inp" id="search" placeholder="Buscar..." onkeyup="resetPage();render()">
-                <i class="fas fa-qrcode icon-btn" onclick="openScanner()"></i>
-                <i class="fas fa-microphone icon-btn" onclick="startVoice()"></i>
+            
+            <div class="type-tabs">
+                <div class="type-tab active" onclick="setTypeFilter('Todos', this)">Todo</div>
+                <div class="type-tab" onclick="setTypeFilter('Insumo', this)">Insumos</div>
+                <div class="type-tab" onclick="setTypeFilter('Herramienta', this)">Herramientas</div>
+                <div class="type-tab" onclick="setTypeFilter('Venta', this)">Ventas</div>
             </div>
             <div class="filter-row" id="catChips"></div>
         </div>
 
-        <div class="list-area" id="list"></div>
+        <main class="inventory-list" id="list"></main>
 
-        <div class="dock-wrapper">
-            <div class="dock">
-                <div class="dock-item active" onclick="resetPage();render('all')">
-                    <i class="fas fa-home"></i> Inicio
-                </div>
-                <div class="dock-item" onclick="openCart()">
-                    <div style="position:relative">
-                        <i class="fas fa-shopping-bag"></i>
-                        <div class="cart-badge" id="cartBadge">0</div>
-                    </div>
-                    Venta
-                </div>
-                
-                <div class="dock-fab" onclick="newItem()">
-                    <i class="fas fa-plus"></i>
-                </div>
+        <div id="paginationWrapper" class="pagination-wrapper"></div>
 
-                <div class="dock-item" onclick="openAudit()">
-                    <i class="fas fa-clipboard-check"></i> Audit
-                </div>
-                <div class="dock-item" onclick="openModal('modalMenu')">
-                    <i class="fas fa-th-large"></i> Menú
-                </div>
+        <nav class="bottom-nav">
+            <div class="nav-item active" onclick="resetPage();render('all'); updateNav(this)"><i class="fas fa-box-open"></i> Inicio</div>
+            <div class="nav-item" onclick="openCart(); updateNav(this)" style="position:relative">
+                <i class="fas fa-shopping-cart"></i> Venta <span class="badge" id="cartBadge">0</span>
             </div>
+            <div class="nav-fab" onclick="newItem()"><i class="fas fa-plus"></i></div>
+            <div class="nav-item" onclick="openModal('modalMenu'); updateNav(this)"><i class="fas fa-th-large"></i> Menú</div>
+            <div class="nav-item" onclick="cycleTheme()"><i class="fas fa-adjust"></i> Tema</div>
+        </nav>
+    </div>
+
+    <div class="modal-overlay" id="modalProd">
+        <div class="modal-header">
+            <div class="modal-title" id="mProdTitle">Editar Item</div>
+            <button class="btn-close" onclick="closeModal()"><i class="fas fa-times"></i></button>
         </div>
-
-    </div> <div class="overlay" id="modalProd" onclick="if(event.target===this)closeModal()">
-        <div class="sheet">
-            <div class="sheet-header">
-                <div class="sheet-title">Editar Item</div>
-                <div class="close-btn" onclick="closeModal()"><i class="fas fa-times"></i></div>
+        <div class="modal-body">
+            <div style="display:flex; gap:20px; margin-bottom:20px; align-items:center">
+                <div style="width:90px; height:90px; background:var(--bg-elevated); border-radius:18px; border:2px dashed var(--border); display:flex; align-items:center; justify-content:center; overflow:hidden; cursor:pointer;" onclick="document.getElementById('fInp').click()">
+                    <img id="pImg" style="width:100%;height:100%;object-fit:cover;display:none">
+                    <i class="fas fa-camera" id="pIcon" style="color:var(--text-muted); font-size:1.5rem"></i>
+                </div>
+                <input type="file" id="fInp" hidden accept="image/*" onchange="procImg(this)">
+                <div style="flex:1">
+                    <label class="input-label">Nombre *</label>
+                    <input class="input-control" id="iName" placeholder="Ej: Filtro de Aceite" style="margin-bottom:0">
+                </div>
             </div>
-            <div class="sheet-body">
-                <div style="display:flex; gap:15px; margin-bottom:15px">
-                    <div style="width:80px; height:80px; background:#222; border-radius:12px; border:1px dashed #444; display:flex; align-items:center; justify-content:center; overflow:hidden" onclick="document.getElementById('fInp').click()">
-                        <img id="pImg" style="width:100%;height:100%;object-fit:cover;display:none">
-                        <i class="fas fa-camera" id="pIcon" style="color:#666"></i>
-                    </div>
-                    <input type="file" id="fInp" hidden accept="image/*" onchange="procImg(this)">
-                    <div style="flex:1">
-                        <span class="inp-label">Nombre</span>
-                        <input class="inp" id="iName" placeholder="Ej: Filtro Aire">
-                    </div>
-                </div>
 
-                <div class="grid-2">
-                    <div><span class="inp-label">Precio</span><input type="number" class="inp" id="iPrice" style="color:var(--success)"></div>
-                    <div><span class="inp-label">Costo</span><input type="number" class="inp" id="iCost"></div>
+            <div class="grid-2">
+                <div class="input-group">
+                    <label class="input-label">Tipo</label>
+                    <select class="input-control" id="iType">
+                        <option value="Venta">Venta</option>
+                        <option value="Insumo">Insumo</option>
+                        <option value="Herramienta">Herramienta</option>
+                    </select>
                 </div>
-                <div class="grid-2">
-                    <div><span class="inp-label">Stock</span><input type="number" class="inp" id="iStock" style="font-weight:700"></div>
-                    <div><span class="inp-label">Mínimo</span><input type="number" class="inp" id="iMin" value="3"></div>
-                </div>
+                <div class="input-group"><label class="input-label">Categoría</label><input class="input-control" id="iCat" list="catList" placeholder="Selecciona..."></div>
+            </div>
 
-                <span class="inp-label">Categoría</span>
-                <input class="inp" id="iCat" list="catList">
-                <datalist id="catList"></datalist>
+            <div class="grid-2">
+                <div class="input-group"><label class="input-label">Precio Venta ($)</label><input type="number" class="input-control" id="iPrice" style="color:var(--success); font-weight:bold;"></div>
+                <div class="input-group"><label class="input-label">Stock Actual</label><input type="number" class="input-control" id="iStock" style="font-weight:bold; font-size:1.2rem"></div>
+            </div>
 
-                <span class="inp-label">Ubicación</span>
-                <input class="inp" id="iLoc" placeholder="Estante A1">
-
-                <button class="btn-main" onclick="saveItem()">GUARDAR</button>
-                
-                <div class="grid-2" style="margin-top:15px">
-                    <button class="btn-sec" onclick="cloneItem()"><i class="fas fa-copy"></i> Clonar</button>
-                    <button class="btn-sec" onclick="deleteItem()" style="color:var(--danger); border-color:var(--danger)"><i class="fas fa-trash"></i> Eliminar</button>
-                </div>
+            <button class="btn-primary" onclick="saveItem()"><i class="fas fa-save"></i> GUARDAR CAMBIOS</button>
+            <div class="grid-2" style="margin-top:10px" id="editActions">
+                <button class="btn-sec" onclick="cloneItem()"><i class="fas fa-copy"></i> Duplicar</button>
+                <button class="btn-sec" onclick="deleteItem()" style="color:var(--danger); border-color:var(--danger);"><i class="fas fa-trash"></i> Eliminar</button>
             </div>
         </div>
     </div>
 
-    <div class="overlay" id="modalMenu" onclick="if(event.target===this)closeModal()">
-        <div class="sheet">
-            <div class="sheet-header">
-                <div class="sheet-title">Herramientas</div>
-                <div class="close-btn" onclick="closeModal()"><i class="fas fa-times"></i></div>
+    <div class="modal-overlay" id="modalMenu">
+        <div class="modal-header">
+            <div class="modal-title">Panel de Control</div>
+            <button class="btn-close" onclick="closeModal()"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="modal-body">
+            <span class="input-label">Herramientas de Gestión</span>
+            <div class="grid-3">
+                <div class="tool-card" onclick="bulkPrice()"><i class="fas fa-percent" style="color:var(--primary)"></i><span>Precios</span></div>
+                <div class="tool-card" onclick="generatePicking()"><i class="fas fa-list-check" style="color:var(--warning)"></i><span>Picking List</span></div>
+                <div class="tool-card" onclick="showDeadStock()"><i class="fas fa-box-open" style="color:#a1a1aa"></i><span>Stock Bajo</span></div>
             </div>
-            <div class="sheet-body">
-                <span class="inp-label">Gestión</span>
-                <div class="grid-3">
-                    <div class="tool-card" onclick="bulkPrice()">
-                        <i class="fas fa-tags" style="color:var(--primary)"></i>
-                        <span>Inflación</span>
-                    </div>
-                    <div class="tool-card" onclick="generatePicking()">
-                        <i class="fas fa-file-pdf" style="color:var(--warning)"></i>
-                        <span>Picking</span>
-                    </div>
-                    <div class="tool-card" onclick="showDeadStock()">
-                        <i class="fas fa-skull" style="color:#666"></i>
-                        <span>Stk Muerto</span>
-                    </div>
-                </div>
-
-                <span class="inp-label">Sistema</span>
-                <div class="grid-3">
-                    <div class="tool-card" onclick="backupData()">
-                        <i class="fas fa-download" style="color:var(--success)"></i>
-                        <span>Backup</span>
-                    </div>
-                    <div class="tool-card" onclick="exportData()">
-                        <i class="fas fa-file-csv" style="color:var(--success)"></i>
-                        <span>Excel</span>
-                    </div>
-                    <div class="tool-card" onclick="healthCheck()">
-                        <i class="fas fa-heartbeat" style="color:var(--danger)"></i>
-                        <span>Salud DB</span>
-                    </div>
-                </div>
-                
-                <div class="grid-2">
-                    <button class="btn-sec" onclick="toggleCurrency()"><i class="fas fa-dollar-sign"></i> USD/CLP</button>
-                    <button class="btn-sec" onclick="logout()" style="border-color:var(--danger); color:var(--danger)"><i class="fas fa-sign-out-alt"></i> Salir</button>
-                </div>
+            <span class="input-label">Sistema y Datos</span>
+            <div class="grid-3">
+                <div class="tool-card" onclick="backupData()"><i class="fas fa-database" style="color:var(--success)"></i><span>Backup</span></div>
+                <div class="tool-card" onclick="exportData()"><i class="fas fa-file-excel" style="color:var(--success)"></i><span>Export CSV</span></div>
+                <div class="tool-card" onclick="cycleTheme()"><i class="fas fa-paint-brush" style="color:var(--primary)"></i><span id="lblTheme">Tema</span></div>
+            </div>
+            <div class="grid-2">
+                <button class="btn-sec" onclick="toggleCurrency()"><i class="fas fa-exchange-alt"></i> USD / CLP</button>
+                <button class="btn-sec" onclick="logout()" style="color:var(--danger); border-color:var(--danger)"><i class="fas fa-power-off"></i> Salir</button>
             </div>
         </div>
     </div>
 
-    <div class="overlay" id="modalCart" onclick="if(event.target===this)closeModal()">
-        <div class="sheet">
-            <div class="sheet-header">
-                <div class="sheet-title">Punto de Venta</div>
-                <div class="close-btn" onclick="closeModal()"><i class="fas fa-times"></i></div>
-            </div>
-            <div class="sheet-body">
-                <input class="inp" id="cClient" placeholder="Cliente / Referencia">
-                <div id="cartList" style="max-height:250px; overflow-y:auto; border:1px solid #333; border-radius:10px; padding:10px; margin-bottom:15px"></div>
-                
-                <div style="display:flex; justify-content:space-between; margin-bottom:15px">
-                    <span style="color:var(--text-muted)">Total a Pagar</span>
-                    <span id="cTotal" style="font-size:1.5rem; font-weight:800; color:var(--success)">$0</span>
-                </div>
-
-                <button class="btn-main" style="background:#25D366; color:white" onclick="sendWhatsApp()"><i class="fab fa-whatsapp"></i> Generar Orden</button>
-                <button class="btn-sec" onclick="clearCart()" style="color:var(--danger)">Vaciar Carrito</button>
-            </div>
+    <div class="modal-overlay" id="modalCart">
+        <div class="modal-header">
+            <div class="modal-title">Punto de Venta</div>
+            <button class="btn-close" onclick="closeModal()"><i class="fas fa-times"></i></button>
         </div>
-    </div>
-
-    <div class="overlay" id="modalHelp" onclick="if(event.target===this)closeModal()">
-        <div class="sheet">
-            <div class="sheet-header">
-                <div class="sheet-title">Academia JM</div>
-                <div class="close-btn" onclick="closeModal()"><i class="fas fa-times"></i></div>
+        <div class="modal-body">
+            <div class="input-group">
+                <label class="input-label">Datos del Cliente</label>
+                <input class="input-control" id="cClient" placeholder="Nombre o Referencia">
             </div>
-            <div class="sheet-body">
-                <div class="help-item">
-                    <div class="help-head"><i class="fas fa-bolt"></i> Inicio Rápido</div>
-                    <div class="help-body">El menú inferior (Dock) es tu centro de mando. Usa el botón central <b>(+)</b> para agregar productos y el ícono de casa para volver a la lista principal.</div>
-                </div>
-                <div class="help-item">
-                    <div class="help-head"><i class="fas fa-shopping-bag"></i> Ventas</div>
-                    <div class="help-body">Toca el ícono pequeño de <b>bolsa</b> en cada producto para sumarlo al carrito. Luego ve a la pestaña "Venta" para finalizar el pedido por WhatsApp.</div>
-                </div>
-                <div class="help-item">
-                    <div class="help-head"><i class="fas fa-cloud"></i> Sincronización</div>
-                    <div class="help-body">El punto verde arriba indica que estás conectado. Si se pone gris (Offline), sigue trabajando tranquilo: la app guardará todo cuando vuelva la señal.</div>
-                </div>
-                <button class="btn-main" onclick="closeModal()">Entendido</button>
+            <label class="input-label">Resumen de Compra</label>
+            <div id="cartList" style="max-height:250px; overflow-y:auto; border:1px solid var(--border); border-radius:var(--radius-md); padding:10px; margin-bottom:20px; background:var(--bg-elevated)"></div>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; padding:15px; background:rgba(16, 185, 129, 0.1); border-radius:var(--radius-md); border:1px solid rgba(16, 185, 129, 0.3)">
+                <span style="font-weight:700; text-transform:uppercase;">Total</span>
+                <span id="cTotal" style="font-size:1.8rem; font-weight:800; color:var(--success); font-family:var(--font-mono);">$0</span>
             </div>
+            <button class="btn-primary" style="background:#25D366; color:white;" onclick="sendWhatsApp()"><i class="fab fa-whatsapp"></i> Generar Orden</button>
+            <button class="btn-sec" onclick="clearCart()" style="color:var(--danger); border-color:transparent;">Vaciar Carrito</button>
         </div>
     </div>
 
     <div class="scanner-layer" id="scannerLayer">
-        <div id="reader" style="flex:1"></div>
-        <button class="btn-main" style="border-radius:0; margin:0; background:var(--danger); color:white" onclick="closeScanner()">CERRAR ESCÁNER</button>
+        <div style="padding:20px; background:var(--bg-surface); text-align:center; font-weight:800; font-size:1.2rem; border-bottom:1px solid var(--border)">ESCÁNER ACTIVO</div>
+        <div id="reader"></div>
+        <button class="btn-primary" style="border-radius:0; margin:0; padding:25px; background:var(--danger); font-size:1.1rem; color:white" onclick="closeScanner()"><i class="fas fa-times-circle"></i> CANCELAR</button>
     </div>
 
     <script>
-        // CONFIG
-        const API_URL = "https://script.google.com/macros/s/AKfycbxEc32AGa2NjDDABs3i3Hz8eARZqBnp3T7F-bN9LYPReoRpmiHy-kCMG4koR-WJ9eGg/exec";
-        
-        // LOGIN LOGIC
-        function attemptLogin() {
-            const u = document.getElementById('logUser').value;
-            const p = document.getElementById('logPass').value;
-            const msg = document.getElementById('loginMsg');
-
-            if(u === "22469301" && p === "5050") {
-                const layer = document.getElementById('loginLayer');
-                const app = document.getElementById('appContainer');
-                
-                layer.classList.add('unlocking'); 
-                app.classList.add('visible'); 
-                showToast("Acceso Concedido");
-                setTimeout(() => { layer.style.display = 'none'; }, 800);
-            } else {
-                msg.innerText = "Credenciales Incorrectas";
-                document.getElementById('logPass').value = "";
-                const card = document.querySelector('.login-card');
-                card.style.transform = "translateX(5px)";
-                setTimeout(()=>card.style.transform="translateX(-5px)",50);
-                setTimeout(()=>card.style.transform="translateX(5px)",100);
-                setTimeout(()=>card.style.transform="translateX(0)",150);
-            }
-        }
-
-        // LOGOUT LOGIC (NUEVO)
-        function logout() {
-            closeModal();
-            const layer = document.getElementById('loginLayer');
-            const app = document.getElementById('appContainer');
-            
-            // 1. Mostrar capa (invisible aun)
-            layer.style.display = 'flex';
-            document.getElementById('logPass').value = "";
-            document.getElementById('loginMsg').innerText = "";
-            
-            // 2. Animación inversa
-            setTimeout(() => {
-                app.classList.remove('visible'); // App se encoge
-                layer.classList.remove('unlocking'); // Login aparece
-            }, 50);
-        }
-
-        // STATE
+        // CORE STATE & API
+        const API_URL = "https://script.google.com/macros/s/AKfycbwixXv9rQRjz62cNPPhOYx-yJolakplAnAljyf9Ywk1b4i9xkc_kkuInKi4b9BgRfLE/exec";
         let db = { items: [] };
         let cart = [];
         let syncQueue = JSON.parse(localStorage.getItem('jm_queue') || "[]");
         let editId = null, imgBuffer = "";
         let scanner = null;
-        let usdRate = 950;
-        let showUsd = false;
-        
-        // PAGINATION STATE (NUEVO)
-        let currentPage = 1;
+        let usdRate = 950, showUsd = false;
+        let currentPage = 1, currentTypeFilter = 'Todos';
         const itemsPerPage = 20;
 
-        // INIT
-        window.onload = () => {
-            document.getElementById('logUser').focus();
-            loadLocal();
-            syncDown();
-            render();
-            updateStats();
-            setInterval(processQueue, 10000);
+        // THEMES
+        let currentTheme = localStorage.getItem('jm_theme') || 'oled'; 
+        function applyTheme(t) { document.body.classList.remove('theme-light', 'theme-oled'); if(t === 'light') { document.body.classList.add('theme-light'); document.getElementById('metaThemeColor').content = "#f1f5f9"; } else if(t === 'oled') { document.body.classList.add('theme-oled'); document.getElementById('metaThemeColor').content = "#000000"; } else { document.getElementById('metaThemeColor').content = "#0f172a"; } document.getElementById('lblTheme').innerText = t === 'dark' ? "Oscuro" : (t === 'oled' ? "OLED" : "Claro"); }
+        function cycleTheme() { currentTheme = currentTheme === 'dark' ? 'oled' : (currentTheme === 'oled' ? 'light' : 'dark'); localStorage.setItem('jm_theme', currentTheme); applyTheme(currentTheme); showToast("Modo: " + currentTheme.toUpperCase()); }
+
+        // UI HELPERS
+        function showToast(msg) { let t = document.getElementById('toast'); t.innerHTML = `<i class="fas fa-info-circle"></i> ${msg}`; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'), 3000); }
+        function updateNav(el) { document.querySelectorAll('.nav-item').forEach(d => d.classList.remove('active')); el.classList.add('active'); }
+        function openModal(id) { document.querySelectorAll('.modal-overlay').forEach(x=>x.style.display="none"); document.getElementById(id).style.display="flex"; }
+        function closeModal() { document.querySelectorAll('.modal-overlay').forEach(x=>x.style.display="none"); }
+
+        // MANEJO ESTILO ITUNES
+        function setStatus(statusType, customText = null) { 
+            let d = document.getElementById('syncDot'), t = document.getElementById('syncText'); 
+            let offBanner = document.getElementById('offline-banner');
+
+            if(statusType === 'online') { d.className = 'dot online'; t.innerText = customText || 'Sincronizado'; offBanner.style.display = 'none'; } 
+            else if(statusType === 'sync') { d.className = 'dot sync'; t.innerText = customText || 'Sincronizando...'; offBanner.style.display = 'none'; }
+            else if(statusType === 'upload') { d.className = 'dot upload'; t.innerText = customText; offBanner.style.display = 'none'; } 
+            else { d.className = 'dot offline'; t.innerText = customText || 'Offline'; offBanner.style.display = 'block'; } 
+        }
+
+        window.addEventListener('online', () => { showToast("Conexión detectada"); syncDown(); processQueue(); });
+        window.addEventListener('offline', () => { showToast("Se perdió el Internet"); setStatus('offline'); });
+
+        // LOGIN
+        function attemptLogin() { 
+            let userInp = document.getElementById('logUser').value;
+            if(userInp === "22469301" && document.getElementById('logPass').value === "5050") { 
+                localStorage.setItem('jm_logged_user', userInp);
+                document.getElementById('userNameDisplay').innerText = userInp;
+                document.getElementById('loginLayer').classList.add('unlocking'); 
+                document.getElementById('appContainer').classList.add('visible'); 
+                setTimeout(() => { document.getElementById('loginLayer').style.display = 'none'; }, 400); 
+            } else { 
+                document.getElementById('loginMsg').innerText = "Incorrecto"; document.getElementById('logPass').value = ""; 
+            } 
+        }
+        function logout() { closeModal(); document.getElementById('loginLayer').style.display = 'flex'; document.getElementById('logPass').value = ""; document.getElementById('loginMsg').innerText = ""; setTimeout(() => { document.getElementById('appContainer').classList.remove('visible'); document.getElementById('loginLayer').classList.remove('unlocking'); }, 50); }
+
+        // INIT & DATA SYNC
+        window.onload = () => { 
+            applyTheme(currentTheme); 
+            let savedUser = localStorage.getItem('jm_logged_user') || "Admin";
+            document.getElementById('userNameDisplay').innerText = savedUser;
+            document.getElementById('logUser').focus(); 
+            loadLocal(); syncDown(); render(); updateStats(); 
+            setInterval(processQueue, 10000); 
         };
 
-        // --- CORE DATA ---
-        function loadLocal() {
-            let s = localStorage.getItem('jm_db_25');
-            if(s) db = JSON.parse(s);
-            else if(localStorage.getItem('jm_db_24')) db = JSON.parse(localStorage.getItem('jm_db_24'));
-        }
-        function saveLocal() {
-            localStorage.setItem('jm_db_25', JSON.stringify(db));
-            updateStats();
-        }
+        function loadLocal() { let s = localStorage.getItem('jm_db_25'); if(s) db = JSON.parse(s); else if(localStorage.getItem('jm_db_24')) db = JSON.parse(localStorage.getItem('jm_db_24')); }
+        function saveLocal() { localStorage.setItem('jm_db_25', JSON.stringify(db)); updateStats(); }
+        
         async function syncDown() {
-            setStatus('sync');
+            if(!navigator.onLine) { setStatus('offline'); return; }
+            setStatus('sync', 'Descargando DB...');
+            let downloadedData = null;
+            
             try {
-                let c = new AbortController(); setTimeout(()=>c.abort(), 10000);
-                let r = await fetch(API_URL, {signal: c.signal});
-                if(r.ok) {
-                    let d = await r.json();
-                    if(Array.isArray(d) && d.length>0) { db.items=d; saveLocal(); render(); }
-                    setStatus('online');
-                }
-            } catch(e) { setStatus('offline'); }
+                let r = await fetch(API_URL);
+                let text = await r.text(); 
+                try { let d = JSON.parse(text); if(Array.isArray(d)) downloadedData = d; } 
+                catch(jsonError) { console.error("Servidor no devolvió JSON:", text.substring(0, 50)); setStatus('offline'); return; }
+            } catch(e) { console.error("Fallo de red:", e); setStatus('offline'); return; }
+
+            if (downloadedData) { db.items = downloadedData; saveLocal(); setStatus('online'); try { render(); } catch(renderError) { console.error("Fallo en render:", renderError); } }
         }
-        function addToQueue(action, data) {
-            syncQueue.push({action, ...data});
-            localStorage.setItem('jm_queue', JSON.stringify(syncQueue));
-            processQueue();
-        }
+        
+        function addToQueue(action, data) { syncQueue.push({action, ...data}); localStorage.setItem('jm_queue', JSON.stringify(syncQueue)); processQueue(); }
+        
         async function processQueue() {
             if(syncQueue.length===0 || !navigator.onLine) return;
-            setStatus('sync');
-            try {
-                await fetch(API_URL, {method:"POST", body:JSON.stringify(syncQueue[0])});
-                syncQueue.shift();
-                localStorage.setItem('jm_queue', JSON.stringify(syncQueue));
-                if(syncQueue.length>0) setTimeout(processQueue, 500); else setStatus('online');
+            
+            let currentTask = syncQueue[0];
+            let payloadStr = JSON.stringify(currentTask);
+            
+            if (currentTask.imagenBase64 && currentTask.imagenBase64.length > 50) {
+                let kbSize = (new Blob([payloadStr]).size / 1024).toFixed(1);
+                setStatus('upload', `Subiendo ☁️ ${kbSize} KB`);
+            } else {
+                setStatus('sync', 'Sincronizando...');
+            }
+
+            try { 
+                await fetch(API_URL, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: payloadStr }); 
+                syncQueue.shift(); localStorage.setItem('jm_queue', JSON.stringify(syncQueue)); 
+                if(syncQueue.length > 0) setTimeout(processQueue, 800); else setStatus('online');
             } catch(e) { setStatus('offline'); }
         }
+        function manualSync() { if(navigator.onLine) { syncDown(); processQueue(); } else { showToast("Sin conexión"); } }
 
-        // --- RENDER & PAGINATION (MODIFICADO) ---
+        // BÚSQUEDA Y FILTROS
+        let searchTimeout;
+        function handleSearch() { clearTimeout(searchTimeout); searchTimeout = setTimeout(() => { resetPage(); render(); }, 200); }
         function resetPage() { currentPage = 1; }
+        function setTypeFilter(type, el) { currentTypeFilter = type; document.querySelectorAll('.type-tab').forEach(t=>t.classList.remove('active')); el.classList.add('active'); resetPage(); render(); }
 
+        // RENDER CON PAGINACIÓN FIJA
         function render(filter='all') {
-            const list = document.getElementById("list"); list.innerHTML = "";
-            const q = document.getElementById("search").value.toLowerCase();
-            
-            if(db.items.length === 0) {
-                list.innerHTML = `<div class="empty-state"><i class="fas fa-ghost"></i><br>Sin datos. Pulsa + para empezar.</div>`;
-                return;
-            }
+            try {
+                const list = document.getElementById("list"); 
+                const pagWrapper = document.getElementById("paginationWrapper");
+                const searchEl = document.getElementById("search");
+                const q = searchEl ? searchEl.value.toLowerCase() : "";
+                
+                if(!db || !Array.isArray(db.items)) { 
+                    if(list) list.innerHTML = `<div class="empty-state"><p>Sin datos válidos</p></div>`; 
+                    if(pagWrapper) pagWrapper.style.display = "none";
+                    return; 
+                }
+                if(db.items.length === 0) { 
+                    if(list) list.innerHTML = `<div class="empty-state"><i class="fas fa-box-open"></i><p>Inventario Vacío</p></div>`; 
+                    if(pagWrapper) pagWrapper.style.display = "none";
+                    return; 
+                }
 
-            // Chips
-            const cats = new Set(db.items.map(i=>i.categoria).filter(Boolean));
-            const ch = document.getElementById("catChips"); ch.innerHTML=`<div class="chip active" onclick="resetPage();render()">Todo</div>`;
-            const dl = document.getElementById("catList"); dl.innerHTML="";
-            cats.forEach(c => {
-                ch.innerHTML += `<div class="chip" onclick="document.getElementById('search').value='${c}';resetPage();render()">${c}</div>`;
-                dl.innerHTML += `<option value="${c}">`;
-            });
+                let view = db.items.filter(i => i !== null && typeof i === 'object');
+                if(currentTypeFilter !== 'Todos') { view = view.filter(i => String(i.tipo || 'Venta') === currentTypeFilter); }
 
-            // Filtrado
-            let view = db.items.filter(i => (i.nombre||"").toLowerCase().includes(q));
-            
-            if(filter==='low') view = view.filter(i => parseInt(i.stock) <= (parseInt(i.min)||3));
-            if(filter==='val') view.sort((a,b) => (b.precio*b.stock) - (a.precio*a.stock));
+                const cats = new Set(view.map(i => String(i.categoria || "")).filter(c => c.trim() !== ""));
+                let chHtml = `<div class="chip active" onclick="resetPage();render()">Cat: Todo</div>`;
+                cats.forEach(c => { let safeC = c.replace(/'/g, "\\'"); chHtml += `<div class="chip" onclick="document.getElementById('search').value='${safeC}';resetPage();render()">${c}</div>`; });
+                const catChips = document.getElementById("catChips");
+                if(catChips) catChips.innerHTML = chHtml;
+                
+                let dlHtml = ""; cats.forEach(c => dlHtml += `<option value="${c}">`); 
+                const catList = document.getElementById("catList");
+                if(catList) catList.innerHTML = dlHtml;
 
-            // LOGICA DE PAGINACION
-            const totalItems = view.length;
-            const totalPages = Math.ceil(totalItems / itemsPerPage);
-            
-            // Protección si la pagina actual excede el total tras filtrar
-            if (currentPage > totalPages && totalPages > 0) currentPage = totalPages;
-            if (totalPages === 0) currentPage = 1;
+                view = view.filter(i => String(i.nombre || "").toLowerCase().includes(q) || String(i.id || "").toLowerCase().includes(q) || String(i.categoria || "").toLowerCase().includes(q) );
 
-            const start = (currentPage - 1) * itemsPerPage;
-            const pagedView = view.slice(start, start + itemsPerPage);
+                if(filter==='low') view = view.filter(i => (parseInt(i.stock) || 0) <= 3);
+                if(filter==='val') view.sort((a,b) => ((parseFloat(b.precio)||0)*(parseInt(b.stock)||0)) - ((parseFloat(a.precio)||0)*(parseInt(a.stock)||0)));
 
-            // Renderizar Items
-            pagedView.forEach(i => {
-                let s = parseInt(i.stock)||0, min = parseInt(i.min)||3;
-                let statusColor = s===0 ? "var(--danger)" : (s<=min ? "var(--warning)" : "var(--success)");
-                let img = (i.imagen && i.imagen.length>30) ? `<img src="${i.imagen}">` : i.nombre[0].toUpperCase();
-                let p = parseInt(i.precio);
-                let displayPrice = showUsd ? `US$${(p/usdRate).toFixed(2)}` : `$${p.toLocaleString()}`;
+                const totalPages = Math.ceil(view.length / itemsPerPage) || 1;
+                if (currentPage > totalPages) currentPage = totalPages;
+                const start = (currentPage - 1) * itemsPerPage;
+                const pagedView = view.slice(start, start + itemsPerPage);
 
-                list.innerHTML += `
-                <div class="item-card" onclick="editItem('${i.id}')">
-                    <div class="status-strip" style="background:${statusColor}"></div>
-                    <div class="item-img">${img}</div>
-                    <div class="item-content">
-                        <div class="item-title">${i.nombre}</div>
-                        <div class="item-details">
-                            <span class="price-hl">${displayPrice}</span>
-                            <span>${i.categoria||""}</span>
+                let renderHTML = "";
+                pagedView.forEach((i, idx) => {
+                    let delay = `animation-delay: ${idx * 0.02}s`;
+                    let s = parseInt(i.stock) || 0;
+                    let statusColor = s===0 ? "var(--danger)" : (s<=3 ? "var(--warning)" : "var(--success)");
+                    
+                    let isImageValid = i.imagen && typeof i.imagen === 'string' && i.imagen.length > 30;
+                    let img = isImageValid ? `<img src="${i.imagen}" loading="lazy">` : `<i class="${(i.tipo === 'Herramienta') ? 'fas fa-wrench' : 'fas fa-box'}"></i>`;
+                    
+                    let p = parseFloat(i.precio) || 0;
+                    let displayPrice = showUsd ? `US$${(p/usdRate).toFixed(2)}` : `$${p.toLocaleString()}`;
+                    let safeId = String(i.id || "").replace(/'/g, "\\'");
+
+                    renderHTML += `
+                    <div class="item-card" style="${delay}" onclick="editItem('${safeId}')">
+                        <div class="item-icon" style="border-left: 3px solid ${statusColor}">${img}</div>
+                        <div class="item-info">
+                            <div class="item-title">${i.nombre || 'Sin Nombre'}</div>
+                            <div class="item-meta"><span>${i.categoria || 'Sin Cat.'}</span> • <span class="price-hl">${displayPrice}</span></div>
                         </div>
-                    </div>
-                    <div class="item-actions">
-                        <div class="stock-val">${s}</div>
-                        <div class="mini-btn" onclick="event.stopPropagation(); addToCart('${i.id}')"><i class="fas fa-shopping-bag"></i></div>
-                    </div>
-                </div>`;
-            });
+                        <div class="item-stock">
+                            <span class="stock-number" style="color:${statusColor}">${s}</span>
+                            <button class="btn-add-cart" onclick="event.stopPropagation(); addToCart('${safeId}')"><i class="fas fa-cart-plus"></i></button>
+                        </div>
+                    </div>`;
+                });
 
-            // Renderizar Controles de Paginación
-            if(totalPages > 1) {
-                list.innerHTML += `
-                <div class="pagination-bar">
-                    <div class="page-btn" onclick="changePage(-1)"><i class="fas fa-chevron-left"></i></div>
-                    <div class="page-info">Pág ${currentPage} de ${totalPages}</div>
-                    <div class="page-btn" onclick="changePage(1)"><i class="fas fa-chevron-right"></i></div>
-                </div>`;
-            }
+                if(list) list.innerHTML = renderHTML;
+
+                // ACTUALIZAR PAGINACIÓN FIJA
+                if(pagWrapper) {
+                    if(totalPages > 0 && view.length > 0) {
+                        pagWrapper.innerHTML = `
+                        <div class="pagination-bar">
+                            <button class="page-btn" onclick="changePage(-1)" ${currentPage === 1 ? 'disabled' : ''}><i class="fas fa-chevron-left"></i> Ant</button>
+                            <span style="font-size: 0.95rem; font-weight: 800; color: var(--text-main)">Pág ${currentPage} / ${totalPages}</span>
+                            <button class="page-btn" onclick="changePage(1)" ${currentPage === totalPages ? 'disabled' : ''}>Sig <i class="fas fa-chevron-right"></i></button>
+                        </div>`;
+                        pagWrapper.style.display = "block";
+                    } else {
+                        pagWrapper.innerHTML = "";
+                        pagWrapper.style.display = "none";
+                    }
+                }
+
+            } catch(e) { console.error("Error crítico en Render:", e); }
         }
+        function changePage(delta) { currentPage += delta; render(); document.getElementById('list').scrollTop = 0; }
 
-        function changePage(delta) {
-            currentPage += delta;
-            render();
-            // Scroll suave al inicio de la lista
-            document.getElementById('list').scrollTop = 0;
-        }
-
-        // --- ACTIONS ---
-        function openModal(id) { document.querySelectorAll('.overlay').forEach(x=>x.style.display="none"); document.getElementById(id).style.display="flex"; }
-        function closeModal() { document.querySelectorAll('.overlay').forEach(x=>x.style.display="none"); }
-        
-        function newItem() { editId=null; imgBuffer=""; document.querySelectorAll('.inp').forEach(i=>i.value=""); document.getElementById('pImg').style.display="none"; openModal('modalProd'); }
-        
+        // CRUD
+        function newItem() { editId=null; imgBuffer=""; document.getElementById('mProdTitle').innerText = "Nuevo Registro"; document.getElementById('editActions').style.display = "none"; document.querySelectorAll('#modalProd .input-control').forEach(i=>i.value=""); document.getElementById('iType').value = "Venta"; document.getElementById('pImg').style.display="none"; document.getElementById('pIcon').style.display="block"; openModal('modalProd'); }
         function editItem(id) {
-            let i = db.items.find(x=>x.id===id); if(!i) return;
-            editId=id; imgBuffer=i.imagen;
-            document.getElementById('iName').value=i.nombre;
-            document.getElementById('iPrice').value=i.precio;
-            document.getElementById('iCost').value=i.costo||"";
-            document.getElementById('iStock').value=i.stock;
-            document.getElementById('iMin').value=i.min||3;
-            document.getElementById('iCat').value=i.categoria||"";
-            document.getElementById('iLoc').value=i.ubicacion||"";
-            if(i.imagen && i.imagen.length>30) { document.getElementById('pImg').src=i.imagen; document.getElementById('pImg').style.display="block"; }
-            else document.getElementById('pImg').style.display="none";
+            let i = db.items.find(x=>String(x.id)===String(id)); if(!i) return;
+            editId=id; imgBuffer=i.imagen; document.getElementById('mProdTitle').innerText = "Editar Registro"; document.getElementById('editActions').style.display = "grid";
+            document.getElementById('iName').value=i.nombre; document.getElementById('iType').value = i.tipo || "Venta";
+            document.getElementById('iPrice').value=i.precio; document.getElementById('iStock').value=i.stock;
+            document.getElementById('iCat').value=i.categoria||""; 
+            if(i.imagen && typeof i.imagen === 'string' && i.imagen.length>30) { document.getElementById('pImg').src=i.imagen; document.getElementById('pImg').style.display="block"; document.getElementById('pIcon').style.display="none"; } else { document.getElementById('pImg').style.display="none"; document.getElementById('pIcon').style.display="block"; }
             openModal('modalProd');
         }
-
         function saveItem() {
-            let n = document.getElementById('iName').value; if(!n) return showToast("Falta Nombre");
-            let obj = {
-                id: editId || "IT-"+Date.now(),
-                nombre: n,
-                precio: parseFloat(document.getElementById('iPrice').value) || 0,
-                costo: parseFloat(document.getElementById('iCost').value) || 0,
-                stock: parseInt(document.getElementById('iStock').value) || 0,
-                min: parseInt(document.getElementById('iMin').value) || 3,
-                categoria: document.getElementById('iCat').value,
-                ubicacion: document.getElementById('iLoc').value,
-                imagen: imgBuffer
-            };
-            if(editId) {
-                let idx = db.items.findIndex(x=>x.id===editId);
-                db.items[idx] = {...db.items[idx], ...obj};
-                addToQueue("editar", {idOriginal:editId, nuevoId:editId, ...obj, imagenBase64:(imgBuffer.length>50?imgBuffer:""), borrarImagen:false});
-            } else {
-                db.items.unshift(obj);
-                addToQueue("agregar", {idOriginal:obj.id, nuevoId:obj.id, ...obj, imagenBase64:imgBuffer, borrarImagen:false});
-            }
-            saveLocal(); closeModal(); render(); showToast("Guardado");
+            let n = document.getElementById('iName').value; if(!n) return showToast("Falta nombre");
+            let payload = { action: editId ? "editar" : "agregar", idOriginal: editId, nuevoId: editId || "IT-"+Date.now(), nombre: n, tipo: document.getElementById('iType').value, categoria: document.getElementById('iCat').value, precio: parseFloat(document.getElementById('iPrice').value) || 0, stock: parseInt(document.getElementById('iStock').value) || 0, imagenBase64: (imgBuffer && imgBuffer.length > 50) ? imgBuffer : "", borrarImagen: false };
+            let obj = { id: payload.nuevoId, nombre: payload.nombre, tipo: payload.tipo, precio: payload.precio, stock: payload.stock, categoria: payload.categoria, imagen: imgBuffer };
+            if(editId) { let idx = db.items.findIndex(x=>String(x.id)===String(editId)); if(idx>=0) db.items[idx] = {...db.items[idx], ...obj}; } else { db.items.unshift(obj); }
+            addToQueue(payload.action, payload); saveLocal(); closeModal(); render(); showToast("Guardado");
         }
+        function deleteItem() { if(!confirm("¿Borrar?"))return; db.items=db.items.filter(x=>String(x.id)!==String(editId)); addToQueue("borrar",{id:editId}); saveLocal(); closeModal(); render(); showToast("Eliminado"); }
+        function cloneItem() { editId=null; document.getElementById('iName').value += " (Copia)"; document.getElementById('mProdTitle').innerText = "Clonando..."; document.getElementById('editActions').style.display = "none"; showToast("Modo Clonación"); }
+        function procImg(i) { if(i.files && i.files[0]) { let r=new FileReader(); r.onload=e=>{ let im=new Image(); im.src=e.target.result; im.onload=()=>{ let c=document.createElement('canvas'),x=c.getContext('2d'),s=Math.min(400/im.width,400/im.height); c.width=im.width*s;c.height=im.height*s;x.drawImage(im,0,0,c.width,c.height); imgBuffer=c.toDataURL('image/jpeg',0.6); document.getElementById('pImg').src=imgBuffer; document.getElementById('pImg').style.display="block"; document.getElementById('pIcon').style.display="none"; }; }; r.readAsDataURL(i.files[0]); } }
 
-        function deleteItem() { if(!confirm("¿Borrar?"))return; db.items=db.items.filter(x=>x.id!==editId); addToQueue("borrar",{id:editId}); saveLocal(); closeModal(); render(); }
-        function cloneItem() { editId=null; document.getElementById('iName').value += " (Copia)"; showToast("Modo Clonar"); }
-
-        // --- CART ---
-        function addToCart(id) {
-            let i = db.items.find(x=>x.id===id);
-            let ex = cart.find(x=>x.id===id);
-            if(ex) ex.qty++; else cart.push({id:id, name:i.nombre, price:parseInt(i.precio), qty:1});
-            updateCartBadge(); showToast("Agregado");
-        }
-        function updateCartBadge() {
-            let c = cart.reduce((a,b)=>a+b.qty,0);
-            let b = document.getElementById('cartBadge');
-            if(c>0) { b.style.display="flex"; b.innerText=c; } else b.style.display="none";
-        }
-        function openCart() {
-            let d = document.getElementById('cartList'); d.innerHTML="";
-            let t = 0;
-            cart.forEach((c,idx) => {
-                let sub = c.price * c.qty; t+=sub;
-                d.innerHTML += `<div style="display:flex;justify-content:space-between;padding:10px;border-bottom:1px dashed #333;color:white">
-                    <div><b>${c.name}</b><br>$${c.price}</div>
-                    <div style="display:flex;gap:10px;align-items:center"><i class="fas fa-minus" onclick="cartQty(${idx},-1)"></i><b>${c.qty}</b><i class="fas fa-plus" onclick="cartQty(${idx},1)"></i></div>
-                </div>`;
-            });
-            document.getElementById('cTotal').innerText = "$"+t.toLocaleString();
-            openModal('modalCart');
-        }
+        // CARRITO & UTILES
+        function addToCart(id) { let i = db.items.find(x=>String(x.id)===String(id)); if(!i) return; let ex = cart.find(x=>String(x.id)===String(id)); if(ex) ex.qty++; else cart.push({id:id, name:i.nombre, price:parseInt(i.precio)||0, qty:1}); updateCartBadge(); showToast("Agregado"); }
+        function updateCartBadge() { let c = cart.reduce((a,b)=>a+b.qty,0); let b = document.getElementById('cartBadge'); if(c>0) { b.style.display="block"; b.innerText=c; } else b.style.display="none"; }
+        function openCart() { let d = document.getElementById('cartList'); d.innerHTML=""; let t = 0; cart.forEach((c,idx) => { let sub = c.price * c.qty; t+=sub; d.innerHTML += `<div style="display:flex; justify-content:space-between; align-items:center; padding:12px; border-bottom:1px solid var(--border);"><div style="flex:1; padding-right:10px"><div style="font-weight:700; font-size:0.9rem; margin-bottom:4px">${c.name}</div><div style="color:var(--text-muted); font-size:0.8rem">$${c.price.toLocaleString()} un.</div></div><div style="display:flex; gap:12px; align-items:center; background:var(--bg-base); padding:4px 8px; border-radius:10px;"><i class="fas fa-minus" style="padding:5px; cursor:pointer; color:var(--danger)" onclick="cartQty(${idx},-1)"></i><b style="font-size:1.1rem; width:20px; text-align:center">${c.qty}</b><i class="fas fa-plus" style="padding:5px; cursor:pointer; color:var(--success)" onclick="cartQty(${idx},1)"></i></div></div>`; }); if(cart.length === 0) d.innerHTML = "<div style='padding:20px; text-align:center; color:var(--text-muted)'>Carrito Vacío</div>"; document.getElementById('cTotal').innerText = "$"+t.toLocaleString(); openModal('modalCart'); }
         function cartQty(i,d) { cart[i].qty+=d; if(cart[i].qty<=0)cart.splice(i,1); openCart(); updateCartBadge(); }
         function clearCart() { cart=[]; openCart(); updateCartBadge(); }
-        function sendWhatsApp() {
-            let m = `*PEDIDO JM*\nCliente: ${document.getElementById('cClient').value}\n\n`;
-            cart.forEach(c=>m+=`${c.qty} x ${c.name}\n`);
-            m+=`\nTotal: ${document.getElementById('cTotal').innerText}`;
-            window.open(`https://wa.me/?text=${encodeURIComponent(m)}`,'_blank');
-        }
-
-        // --- UTILS ---
-        function updateStats() {
-            let t=0,v=0,l=0;
-            db.items.forEach(i=>{ t++; v+=parseInt(i.stock)*parseInt(i.precio); if(parseInt(i.stock)<=3)l++; });
-            document.getElementById('kItems').innerText=t;
-            document.getElementById('kVal').innerText="$"+(v/1000).toFixed(1)+"k";
-            document.getElementById('kLow').innerText=l;
-            setTimeout(()=>document.getElementById('barVal').style.width="100%",500);
-        }
-        function procImg(i) {
-            if(i.files && i.files[0]) { let r=new FileReader(); r.onload=e=>{let im=new Image(); im.src=e.target.result; im.onload=()=>{let c=document.createElement('canvas'),x=c.getContext('2d'),s=Math.min(400/im.width,400/im.height);c.width=im.width*s;c.height=im.height*s;x.drawImage(im,0,0,c.width,c.height);imgBuffer=c.toDataURL('image/jpeg',0.6);document.getElementById('pImg').src=imgBuffer;document.getElementById('pImg').style.display="block";}};r.readAsDataURL(i.files[0]); }
-        }
-        function setStatus(s) { document.getElementById('syncDot').className = s==='online'?'dot online':(s==='sync'?'dot sync':'dot offline'); document.getElementById('syncText').innerText=s==='online'?'Online':(s==='sync'?'Sync...':'Offline'); }
-        function showToast(m) { let t=document.getElementById('toast'); t.innerHTML=`<i class="fas fa-check-circle" style="color:var(--primary)"></i> ${m}`; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2000); }
-        function manualSync() { syncDown(); }
+        function sendWhatsApp() { if(cart.length === 0) return showToast("Vacío"); let m = `*PEDIDO - JM NEXUS*\nCliente: ${document.getElementById('cClient').value || "No especificado"}\n\n`; cart.forEach(c=>m+=`▫️ ${c.qty} x ${c.name}\n`); m+=`\n*Total:* ${document.getElementById('cTotal').innerText}`; window.open(`https://wa.me/?text=${encodeURIComponent(m)}`,'_blank'); }
         
-        function openScanner() { document.getElementById('scannerLayer').style.display="flex"; scanner=new Html5Qrcode("reader"); scanner.start({facingMode:"environment"},{fps:10,qrbox:250},t=>{closeScanner();document.getElementById('search').value=t;render();}); }
-        function closeScanner() { document.getElementById('scannerLayer').style.display="none"; if(scanner)scanner.stop(); }
-        function startVoice() { if(!('webkitSpeechRecognition' in window))return alert("No soportado"); let r=new webkitSpeechRecognition(); r.lang="es-ES"; r.start(); r.onresult=e=>{document.getElementById("search").value=e.results[0][0].transcript;render();}}
+        function updateStats() { 
+            let t=0,v=0,l=0; 
+            db.items.forEach(i=>{ 
+                if(i && typeof i === 'object') {
+                    t++; 
+                    v += (parseFloat(i.stock)||0) * (parseFloat(i.precio)||0); 
+                    if((parseInt(i.stock)||0) <= 3) l++; 
+                }
+            }); 
+            document.getElementById('kItems').innerText=t; 
+            document.getElementById('kVal').innerText="$"+(v/1000).toFixed(1)+"k"; 
+            document.getElementById('kLow').innerText=l; 
+        }
         
-        function generatePicking() { const {jsPDF}=window.jspdf; const d=new jsPDF(); d.text("Picking List",10,10); let y=20; db.items.forEach(i=>{if(parseInt(i.stock)>0){d.text(`[ ] ${i.ubicacion||'--'} : ${i.nombre} (${i.stock})`,10,y);y+=10;}}); d.save("picking.pdf"); }
-        function backupData() { let a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([JSON.stringify(db)],{type:'application/json'})); a.download='backup.json'; a.click(); }
-        function exportData() { let c="ID,Nombre,Precio,Stock\n"; db.items.forEach(i=>c+=`${i.id},${i.nombre},${i.precio},${i.stock}\n`); let a=document.createElement('a'); a.href='data:text/csv;charset=utf-8,'+encodeURI(c); a.download='inv.csv'; a.click(); }
-        function bulkPrice() { let p = prompt("Aumentar precios %:"); if(p) { let perc=1+(parseFloat(p)/100); db.items.forEach(i=>{let n=Math.round(parseInt(i.precio)*perc); i.precio=n; addToQueue("editar",{idOriginal:i.id,nuevoId:i.id,precio:n,nombre:i.nombre,stock:i.stock});}); saveLocal(); render(); } }
+        function generatePicking() { try { const {jsPDF}=window.jspdf; const d=new jsPDF(); d.setFontSize(16); d.text("Picking List",10,15); d.setFontSize(10); let y=30; let toPick = db.items.filter(i => i && (parseInt(i.stock)||0) > 0); toPick.forEach(i=>{ if(y > 280) { d.addPage(); y = 20; } d.text(`[   ] ${i.nombre} | Disp: ${i.stock}`,10,y); y+=10; d.setDrawColor(200); d.line(10, y-3, 200, y-3); }); d.save("JM_PickingList.pdf"); showToast("PDF Listo"); } catch(e) { showToast("Error PDF"); } }
+        function backupData() { let a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([JSON.stringify(db)],{type:'application/json'})); a.download=`NEXUS_Backup_${Date.now()}.json`; a.click(); }
+        function exportData() { let c="ID,Nombre,Tipo,Categoria,Precio,Stock\n"; db.items.forEach(i=>{ if(i) c+=`${i.id},"${i.nombre}",${i.tipo||"Venta"},${i.categoria||""},${i.precio},${i.stock}\n`}); let a=document.createElement('a'); a.href='data:text/csv;charset=utf-8,'+encodeURI(c); a.download=`NEXUS_Export_${Date.now()}.csv`; a.click(); }
+        function bulkPrice() { let p = prompt("Aumentar precios %:"); if(p) { let perc=1+(parseFloat(p)/100); db.items.forEach(i=>{ if(i){ let n=Math.round(parseFloat(i.precio)*perc); i.precio=n; addToQueue("editar",{idOriginal:i.id,nuevoId:i.id,precio:n,nombre:i.nombre,stock:i.stock,tipo:i.tipo,categoria:i.categoria}); }}); saveLocal(); render(); showToast("Actualizados"); } }
         function toggleCurrency() { showUsd=!showUsd; render(); }
-        function showDeadStock() { render('low'); showToast("Mostrando Stock Crítico"); }
-        function healthCheck() { alert(`DB OK. ${db.items.length} items.`); }
-        function openAudit() { if(confirm("¿Iniciar Auditoría Ciega?")) { let r=prompt("Escanear Item:"); if(r) alert("Modo conteo no implementado en esta vista rápida"); } }
+        function showDeadStock() { render('low'); closeModal(); }
 
+        function openScanner() { document.getElementById('scannerLayer').style.display="flex"; try { scanner=new Html5Qrcode("reader"); scanner.start({facingMode:"environment"},{fps:10,qrbox:250},t=>{ closeScanner(); document.getElementById('search').value=t; render(); showToast("Detectado"); }); } catch(e) { showToast("Error cámara"); closeScanner(); } }
+        function closeScanner() { document.getElementById('scannerLayer').style.display="none"; if(scanner) { try{scanner.stop();}catch(e){} } }
+        let recognizing = false, recognition; function startVoice() { let SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition; if (!SpeechRecognition) return showToast("Micrófono no soportado."); if (recognizing) { recognition.stop(); return; } recognition = new SpeechRecognition(); recognition.lang = 'es-CL'; recognition.onstart = () => { recognizing = true; showToast("Escuchando..."); }; recognition.onresult = (e) => { let t = e.results[0][0].transcript; if(t.endsWith('.')) t = t.slice(0, -1); document.getElementById("search").value = t; render(); }; recognition.onerror = (e) => { recognizing = false; }; recognition.onend = () => { recognizing = false; }; try { recognition.start(); } catch(e) {} }
     </script>
 </body>
 </html>
