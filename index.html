@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="theme-color" content="#000000" id="metaThemeColor">
-    <title>JM NEXUS 25.4.7 - Dual Camera Edition</title>
+    <title>JM NEXUS 25.5 - Data Fix Edition</title>
     
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -28,27 +28,15 @@
             --radius-md: 12px;
             --font-main: 'Inter', sans-serif;
             --font-mono: ui-monospace, SFMono-Regular, monospace;
-            
-            /* iTunes Header Colors */
             --itunes-bg: linear-gradient(180deg, #334155 0%, #0f172a 100%);
             --itunes-lcd-bg: #020617;
             --itunes-lcd-text: #e2e8f0;
         }
 
         /* TEMA CLARO */
-        body.theme-light { 
-            --bg-base: #f1f5f9; --bg-surface: #ffffff; --bg-elevated: #e2e8f0; --primary: #2563eb; --text-main: #0f172a; --text-muted: #64748b; --border: #cbd5e1; 
-            --itunes-bg: linear-gradient(180deg, #f8fafc 0%, #e2e8f0 100%);
-            --itunes-lcd-bg: #cbd5e1;
-            --itunes-lcd-text: #0f172a;
-        }
+        body.theme-light { --bg-base: #f1f5f9; --bg-surface: #ffffff; --bg-elevated: #e2e8f0; --primary: #2563eb; --text-main: #0f172a; --text-muted: #64748b; --border: #cbd5e1; --itunes-bg: linear-gradient(180deg, #f8fafc 0%, #e2e8f0 100%); --itunes-lcd-bg: #cbd5e1; --itunes-lcd-text: #0f172a; }
         /* TEMA OLED */
-        body.theme-oled { 
-            --bg-base: #000000; --bg-surface: #0a0a0a; --bg-elevated: #1a1a1a; --border: #222222; 
-            --itunes-bg: linear-gradient(180deg, #111 0%, #000 100%);
-            --itunes-lcd-bg: #000000;
-            --itunes-lcd-text: #34d399;
-        }
+        body.theme-oled { --bg-base: #000000; --bg-surface: #0a0a0a; --bg-elevated: #1a1a1a; --border: #222222; --itunes-bg: linear-gradient(180deg, #111 0%, #000 100%); --itunes-lcd-bg: #000000; --itunes-lcd-text: #34d399; }
         
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; margin: 0; padding: 0; font-family: var(--font-main); }
         body { background-color: var(--bg-base); color: var(--text-main); height: 100dvh; display: flex; flex-direction: column; overflow: hidden; transition: background-color 0.3s, color 0.3s; }
@@ -60,7 +48,7 @@
         @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
         @keyframes pulse { 0%{opacity:1} 50%{opacity:0.5} 100%{opacity:1} }
 
-        /* --- CABECERA iTUNES MINIMALISTA --- */
+        /* CABECERA iTUNES */
         .itunes-header { background: var(--itunes-bg); border-bottom: 1px solid var(--border); display: flex; justify-content: center; align-items: center; padding: 10px 15px; z-index: 10; box-shadow: 0 2px 10px rgba(0,0,0,0.2); }
         .itunes-lcd { background: var(--itunes-lcd-bg); border: 1px solid var(--border); border-radius: 8px; padding: 6px 20px; display: flex; align-items: center; justify-content: center; gap: 12px; width: 100%; max-width: 320px; box-shadow: inset 0 2px 5px rgba(0,0,0,0.5); cursor: pointer; transition: transform 0.2s; }
         .itunes-lcd:active { transform: scale(0.98); }
@@ -74,7 +62,7 @@
         .dot.upload { background: var(--primary); box-shadow: 0 0 8px var(--primary); animation: pulse 0.8s infinite; }
         .dot.offline { background: var(--danger); box-shadow: 0 0 8px var(--danger); }
 
-        /* --- LOGIN --- */
+        /* LOGIN */
         #loginLayer { position: fixed; inset: 0; z-index: 9999; background: var(--bg-base); display: flex; align-items: center; justify-content: center; transition: opacity 0.4s, transform 0.4s; }
         #loginLayer.unlocking { opacity: 0; transform: scale(1.05); pointer-events: none; }
         .login-card { background: var(--bg-surface); padding: 40px 35px; border-radius: 24px; border: 1px solid var(--border); width: 90%; max-width: 380px; text-align: center; box-shadow: 0 15px 35px rgba(0,0,0,0.3); }
@@ -89,7 +77,7 @@
         .btn-login:active { background: var(--primary-active); }
         .login-err { color: var(--danger); font-size: 0.85rem; margin-top: 15px; min-height: 20px; font-weight: 600; }
 
-        /* --- CONTENEDORES --- */
+        /* CONTENEDORES */
         #appContainer { display: flex; flex-direction: column; height: 100%; width: 100%; opacity: 0; transform: scale(0.98); transition: all 0.4s; }
         #appContainer.visible { opacity: 1; transform: scale(1); }
 
@@ -133,14 +121,14 @@
         .stock-number { font-size: 1.3rem; font-weight: 800; font-family: var(--font-mono); }
         .btn-add-cart { background: var(--bg-elevated); border: 1px solid var(--border); color: var(--text-main); width: 36px; height: 36px; border-radius: 8px; font-size: 1rem; cursor: pointer; }
 
-        /* --- PAGINACIÓN FIJA --- */
+        /* PAGINACIÓN FIJA */
         .pagination-wrapper { position: fixed; bottom: 75px; left: 0; width: 100%; background: var(--bg-base); padding: 10px 20px; z-index: 40; border-top: 1px solid var(--border); display: none; }
         .pagination-bar { background: var(--bg-surface); border: 1px solid var(--border); border-radius: var(--radius-md); display: flex; justify-content: space-between; align-items: center; padding: 8px; }
         .page-btn { padding: 10px 15px; background: var(--bg-elevated); border: none; border-radius: 8px; color: var(--text-main); font-weight: bold; cursor: pointer; font-size: 0.9rem; display: flex; align-items: center; gap: 5px; transition: 0.2s; }
         .page-btn:active:not(:disabled) { background: var(--primary); color: white; }
         .page-btn:disabled { opacity: 0.3; cursor: not-allowed; }
 
-        /* --- NAVEGACIÓN INFERIOR --- */
+        /* NAVEGACIÓN INFERIOR */
         .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; height: 75px; background: var(--bg-surface); border-top: 1px solid var(--border); display: flex; justify-content: space-around; align-items: center; z-index: 50; }
         .nav-item { display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-muted); flex: 1; height: 100%; cursor: pointer; font-size: 0.75rem; font-weight: 600; gap: 4px; }
         .nav-item i { font-size: 1.3rem; }
@@ -164,7 +152,6 @@
         
         .btn-primary { width: 100%; padding: 16px; background: var(--primary); color: white; font-weight: 800; font-size: 1.05rem; border: none; border-radius: var(--radius-md); cursor: pointer; margin-top: 10px; }
         .btn-sec { width: 100%; padding: 14px; background: var(--bg-elevated); border: 1px solid var(--border); color: var(--text-main); border-radius: var(--radius-md); font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 10px; border-color: transparent;}
-        .btn-sec:active { background: var(--border); }
         
         .tool-card { background: var(--bg-elevated); padding: 18px 10px; border-radius: var(--radius-md); border: 1px solid var(--border); text-align: center; cursor: pointer; }
         .tool-card i { font-size: 1.8rem; margin-bottom: 10px; display: block; }
@@ -181,7 +168,7 @@
         <div class="login-card">
             <div class="login-logo"><i class="fas fa-fingerprint"></i></div>
             <div class="login-title">JM NEXUS</div>
-            <div class="login-sub">Cámara Dual Edition</div>
+            <div class="login-sub">Edición Estable DB Fix</div>
             
             <div class="login-inp-group">
                 <i class="fas fa-user login-icon"></i>
@@ -258,7 +245,7 @@
         </div>
         <div class="modal-body">
             
-            <div style="display:flex; gap:15px; margin-bottom:20px;">
+            <div style="display:flex; gap:15px; margin-bottom:15px;">
                 <div style="width:100px; height:100px; background:var(--bg-elevated); border-radius:18px; border:2px dashed var(--border); display:flex; align-items:center; justify-content:center; overflow:hidden; flex-shrink:0; cursor:pointer;" onclick="document.getElementById('fGal').click()">
                     <img id="pImg" style="width:100%;height:100%;object-fit:cover;display:none">
                     <i class="fas fa-image" id="pIcon" style="color:var(--text-muted); font-size:1.8rem"></i>
@@ -348,7 +335,7 @@
                 <span id="cTotal" style="font-size:1.8rem; font-weight:800; color:var(--success); font-family:var(--font-mono);">$0</span>
             </div>
             <button class="btn-primary" style="background:#25D366; color:white;" onclick="sendWhatsApp()"><i class="fab fa-whatsapp"></i> Generar Orden</button>
-            <button class="btn-sec" onclick="clearCart()" style="color:var(--danger); border:1px solid transparent;">Vaciar Carrito</button>
+            <button class="btn-sec" onclick="clearCart()" style="color:var(--danger); border-color:transparent;">Vaciar Carrito</button>
         </div>
     </div>
 
@@ -360,11 +347,11 @@
 
     <script>
         // CORE STATE & API
-        const API_URL = "https://script.google.com/macros/s/AKfycbwixXv9rQRjz62cNPPhOYx-yJolakplAnAljyf9Ywk1b4i9xkc_kkuInKi4b9BgRfLE/exec";
+        const API_URL = "https://script.google.com/macros/s/AKfycbxu1euIx7m8ip7J0OqMM4QGEytu58kInUobsSD6e1dVO4FTAOGIkaIHx49UWpvPog1P/exec";
         let db = { items: [] };
         let cart = [];
         let syncQueue = JSON.parse(localStorage.getItem('jm_queue') || "[]");
-        let editId = null, imgBuffer = "";
+        let editId = null, imgBuffer = "", imgOriginal = "";
         let scanner = null;
         let usdRate = 950, showUsd = false;
         let currentPage = 1, currentTypeFilter = 'Todos';
@@ -432,7 +419,7 @@
                 let r = await fetch(API_URL);
                 let text = await r.text(); 
                 try { let d = JSON.parse(text); if(Array.isArray(d)) downloadedData = d; } 
-                catch(jsonError) { console.error("Servidor no JSON:", text.substring(0, 50)); setStatus('offline'); return; }
+                catch(jsonError) { console.error("Servidor no devolvió JSON:", text.substring(0, 50)); setStatus('offline'); return; }
             } catch(e) { console.error("Fallo de red:", e); setStatus('offline'); return; }
 
             if (downloadedData) { db.items = downloadedData; saveLocal(); setStatus('online'); try { render(); } catch(renderError) { console.error("Fallo en render:", renderError); } }
@@ -467,7 +454,7 @@
         function resetPage() { currentPage = 1; }
         function setTypeFilter(type, el) { currentTypeFilter = type; document.querySelectorAll('.type-tab').forEach(t=>t.classList.remove('active')); el.classList.add('active'); resetPage(); render(); }
 
-        // RENDER CON PAGINACIÓN FIJA
+        // RENDER BLINDADO
         function render(filter='all') {
             try {
                 const list = document.getElementById("list"); 
@@ -548,26 +535,105 @@
         function changePage(delta) { currentPage += delta; render(); document.getElementById('list').scrollTop = 0; }
 
         // CRUD
-        function newItem() { editId=null; imgBuffer=""; document.getElementById('mProdTitle').innerText = "Nuevo Registro"; document.getElementById('editActions').style.display = "none"; document.querySelectorAll('#modalProd .input-control').forEach(i=>i.value=""); document.getElementById('iType').value = "Venta"; document.getElementById('pImg').style.display="none"; document.getElementById('pIcon').style.display="block"; openModal('modalProd'); }
+        function newItem() { 
+            editId = null; imgBuffer = ""; imgOriginal = ""; 
+            document.getElementById('mProdTitle').innerText = "Nuevo Registro"; 
+            document.getElementById('editActions').style.display = "none"; 
+            document.querySelectorAll('#modalProd .input-control').forEach(i=>i.value=""); 
+            document.getElementById('iType').value = "Venta"; 
+            document.getElementById('pImg').style.display="none"; 
+            document.getElementById('pIcon').style.display="block"; 
+            openModal('modalProd'); 
+        }
         function editItem(id) {
             let i = db.items.find(x=>String(x.id)===String(id)); if(!i) return;
-            editId=id; imgBuffer=i.imagen; document.getElementById('mProdTitle').innerText = "Editar Registro"; document.getElementById('editActions').style.display = "grid";
-            document.getElementById('iName').value=i.nombre; document.getElementById('iType').value = i.tipo || "Venta";
-            document.getElementById('iPrice').value=i.precio; document.getElementById('iStock').value=i.stock;
-            document.getElementById('iCat').value=i.categoria||""; 
-            if(i.imagen && typeof i.imagen === 'string' && i.imagen.length>30) { document.getElementById('pImg').src=i.imagen; document.getElementById('pImg').style.display="block"; document.getElementById('pIcon').style.display="none"; } else { document.getElementById('pImg').style.display="none"; document.getElementById('pIcon').style.display="block"; }
+            editId = id; imgBuffer = ""; imgOriginal = i.imagen || ""; 
+            document.getElementById('mProdTitle').innerText = "Editar Registro"; 
+            document.getElementById('editActions').style.display = "grid";
+            document.getElementById('iName').value = i.nombre; 
+            document.getElementById('iType').value = i.tipo || "Venta";
+            document.getElementById('iPrice').value = i.precio; 
+            document.getElementById('iStock').value = i.stock;
+            document.getElementById('iCat').value = i.categoria||""; 
+            if(i.imagen && typeof i.imagen === 'string' && i.imagen.length>30) { 
+                document.getElementById('pImg').src = i.imagen; 
+                document.getElementById('pImg').style.display = "block"; 
+                document.getElementById('pIcon').style.display = "none"; 
+            } else { 
+                document.getElementById('pImg').style.display="none"; 
+                document.getElementById('pIcon').style.display="block"; 
+            }
             openModal('modalProd');
         }
         function saveItem() {
             let n = document.getElementById('iName').value; if(!n) return showToast("Falta nombre");
-            let payload = { action: editId ? "editar" : "agregar", idOriginal: editId, nuevoId: editId || "IT-"+Date.now(), nombre: n, tipo: document.getElementById('iType').value, categoria: document.getElementById('iCat').value, precio: parseFloat(document.getElementById('iPrice').value) || 0, stock: parseInt(document.getElementById('iStock').value) || 0, imagenBase64: (imgBuffer && imgBuffer.length > 50) ? imgBuffer : "", borrarImagen: false };
-            let obj = { id: payload.nuevoId, nombre: payload.nombre, tipo: payload.tipo, precio: payload.precio, stock: payload.stock, categoria: payload.categoria, imagen: imgBuffer };
-            if(editId) { let idx = db.items.findIndex(x=>String(x.id)===String(editId)); if(idx>=0) db.items[idx] = {...db.items[idx], ...obj}; } else { db.items.unshift(obj); }
-            addToQueue(payload.action, payload); saveLocal(); closeModal(); render(); showToast("Guardado");
+            
+            // Generación de ID compatible con "INV-XXX"
+            let generatedId = editId;
+            if(!generatedId) {
+                let maxInv = 0;
+                db.items.forEach(it => {
+                    if(it && it.id && String(it.id).startsWith("INV-")) {
+                        let num = parseInt(String(it.id).split("-")[1]);
+                        if(num > maxInv) maxInv = num;
+                    }
+                });
+                generatedId = "INV-" + ("000" + (maxInv + 1)).slice(-3);
+            }
+
+            let payload = { 
+                action: editId ? "editar" : "agregar", 
+                idOriginal: editId, 
+                nuevoId: generatedId, 
+                nombre: n, 
+                tipo: document.getElementById('iType').value, 
+                categoria: document.getElementById('iCat').value, 
+                precio: parseFloat(document.getElementById('iPrice').value) || 0, 
+                stock: parseInt(document.getElementById('iStock').value) || 0, 
+                imagenBase64: (imgBuffer && imgBuffer.length > 50) ? imgBuffer : "", 
+                imagenAnterior: imgOriginal,
+                borrarImagen: false 
+            };
+            
+            // Optimistic UI update
+            let visualImg = imgBuffer ? imgBuffer : imgOriginal;
+            let obj = { id: payload.nuevoId, nombre: payload.nombre, tipo: payload.tipo, precio: payload.precio, stock: payload.stock, categoria: payload.categoria, imagen: visualImg };
+            
+            if(editId) { 
+                let idx = db.items.findIndex(x=>String(x.id)===String(editId)); 
+                if(idx>=0) db.items[idx] = {...db.items[idx], ...obj}; 
+            } else { 
+                db.items.unshift(obj); 
+            }
+            
+            addToQueue(payload.action, payload); 
+            saveLocal(); 
+            closeModal(); 
+            render(); 
+            showToast("Guardado");
         }
         function deleteItem() { if(!confirm("¿Borrar?"))return; db.items=db.items.filter(x=>String(x.id)!==String(editId)); addToQueue("borrar",{id:editId}); saveLocal(); closeModal(); render(); showToast("Eliminado"); }
         function cloneItem() { editId=null; document.getElementById('iName').value += " (Copia)"; document.getElementById('mProdTitle').innerText = "Clonando..."; document.getElementById('editActions').style.display = "none"; showToast("Modo Clonación"); }
-        function procImg(i) { if(i.files && i.files[0]) { let r=new FileReader(); r.onload=e=>{ let im=new Image(); im.src=e.target.result; im.onload=()=>{ let c=document.createElement('canvas'),x=c.getContext('2d'),s=Math.min(400/im.width,400/im.height); c.width=im.width*s;c.height=im.height*s;x.drawImage(im,0,0,c.width,c.height); imgBuffer=c.toDataURL('image/jpeg',0.6); document.getElementById('pImg').src=imgBuffer; document.getElementById('pImg').style.display="block"; document.getElementById('pIcon').style.display="none"; }; }; r.readAsDataURL(i.files[0]); } }
+        
+        function procImg(i) { 
+            if(i.files && i.files[0]) { 
+                let r=new FileReader(); 
+                r.onload=e=>{ 
+                    let im=new Image(); 
+                    im.src=e.target.result; 
+                    im.onload=()=>{ 
+                        let c=document.createElement('canvas'), x=c.getContext('2d'), s=Math.min(400/im.width, 400/im.height); 
+                        c.width=im.width*s; c.height=im.height*s; 
+                        x.drawImage(im,0,0,c.width,c.height); 
+                        imgBuffer=c.toDataURL('image/jpeg',0.6); 
+                        document.getElementById('pImg').src=imgBuffer; 
+                        document.getElementById('pImg').style.display="block"; 
+                        document.getElementById('pIcon').style.display="none"; 
+                    }; 
+                }; 
+                r.readAsDataURL(i.files[0]); 
+            } 
+        }
 
         // CARRITO & UTILES
         function addToCart(id) { let i = db.items.find(x=>String(x.id)===String(id)); if(!i) return; let ex = cart.find(x=>String(x.id)===String(id)); if(ex) ex.qty++; else cart.push({id:id, name:i.nombre, price:parseInt(i.precio)||0, qty:1}); updateCartBadge(); showToast("Agregado"); }
